@@ -21,7 +21,7 @@
                     </form>
                 </div>
             @else
-                <a class="btn btn-login me-2" href="{{ route('dashboard') }}">
+                <a class="btn btn-login me-2" href="{{ route('dashboard.index') }}">
                     Go to Dashboard
                 </a>
             @endif
