@@ -24,69 +24,72 @@ class ApplicationController extends Controller
         return view('applications.create', compact('job'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'job_id' => 'required|exists:jobs,id',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
+            'education' => 'required|string|max:255',
+            'major' => 'nullable|string|max:255',
+            'study_program' => 'nullable|string|max:255',
+            'birth_date' => 'required|date',
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cv' => 'required|file|mimes:pdf|max:5120',
+            'cover_letter' => 'required|file|mimes:pdf|max:5120',
+        ]);
 
-public function store(Request $request)
-{
-    $request->validate([
-        'job_id' => 'required|exists:jobs,id',
-        'full_name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone' => 'required|string|max:20',
-        'address' => 'required|string',
-        'education' => 'required|string|max:255',
-        'major' => 'nullable|string|max:255',
-        'study_program' => 'nullable|string|max:255',
-        'birth_date' => 'required|date',
-        'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        'cv' => 'required|file|mimes:pdf|max:5120',
-        'cover_letter' => 'required|file|mimes:pdf|max:5120',
-    ]);
+        // Simpan file ke public/data dengan subfolder masing-masing
+        $photoPath = $this->storeFile($request->file('photo'), 'photos');
+        $cvPath = $this->storeFile($request->file('cv'), 'cvs');
+        $coverLetterPath = $this->storeFile($request->file('cover_letter'), 'cover_letters');
 
-    // Simpan file dengan nama asli dan cegah duplikasi
-    $photoPath = $this->storeFileWithOriginalName($request->file('photo'), 'photos');
-    $cvPath = $this->storeFileWithOriginalName($request->file('cv'), 'cvs');
-    $coverLetterPath = $this->storeFileWithOriginalName($request->file('cover_letter'), 'cover_letters');
+        $application = Application::create([
+            'job_id' => $request->job_id,
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'education' => $request->education,
+            'major' => $request->major,
+            'study_program' => $request->study_program,
+            'birth_date' => $request->birth_date,
+            'photo' => $photoPath,
+            'cv' => $cvPath,
+            'cover_letter' => $coverLetterPath,
+            'status' => 'submitted',
+            'interview_status' => null,
+        ]);
 
-    $application = Application::create([
-        'job_id' => $request->job_id,
-        'full_name' => $request->full_name,
-        'email' => $request->email,
-        'phone' => $request->phone,
-        'address' => $request->address,
-        'education' => $request->education,
-        'major' => $request->major,
-        'study_program' => $request->study_program,
-        'birth_date' => $request->birth_date,
-        'photo' => $photoPath,
-        'cv' => $cvPath,
-        'cover_letter' => $coverLetterPath,
-        'status' => 'submitted',
-        'interview_status' => null,
-    ]);
+        // Kirim pesan WhatsApp
+        try {
+            $wablasService = new WablasService();
+            $message = View::make('formats.application_submitted_message', compact('application'))->render();
+            $wablasService->sendMessage($application->phone, $message);
+        } catch (\Exception $e) {
+            \Log::error('Gagal mengirim pesan WhatsApp: ' . $e->getMessage());
+        }
 
-    // Kirim pesan WhatsApp
-    try {
-        $wablasService = new WablasService();
-        $message = View::make('formats.application_submitted_message', compact('application'))->render();
-        $wablasService->sendMessage($application->phone, $message);
-    } catch (\Exception $e) {
-        \Log::error('Gagal mengirim pesan WhatsApp: ' . $e->getMessage());
+        return response()->json([
+            'success' => true,
+            'message' => 'Lamaran berhasil dikirim! Terima kasih telah melamar.',
+            'redirect' => route('jobs.show.public', $request->job_id)
+        ]);
     }
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Lamaran berhasil dikirim! Terima kasih telah melamar.',
-        'redirect' => route('jobs.show.public', $request->job_id)
-    ]);
-}
-
     /**
-     * Menyimpan file dengan nama asli dan mencegah duplikasi
+     * Menyimpan file dengan nama asli ke public/data/[subfolder]
      */
-    private function storeFileWithOriginalName($file, $directory)
+    private function storeFile($file, $subfolder)
     {
+        $basePath = public_path('data/' . $subfolder);
+        
         // Buat folder jika belum ada
-        Storage::disk('public')->makeDirectory($directory);
+        if (!file_exists($basePath)) {
+            mkdir($basePath, 0755, true);
+        }
 
         $originalName = $file->getClientOriginalName();
         $cleanName = $this->sanitizeFilename($originalName);
@@ -97,13 +100,15 @@ public function store(Request $request)
         $newName = $cleanName;
 
         // Cek duplikat dan tambahkan counter jika perlu
-        while (Storage::disk('public')->exists("$directory/$newName")) {
+        while (file_exists($basePath . '/' . $newName)) {
             $newName = $baseName . '_' . $counter . '.' . $extension;
             $counter++;
         }
 
         // Simpan file
-        return $file->storeAs($directory, $newName, 'public');
+        $file->move($basePath, $newName);
+        
+        return 'data/' . $subfolder . '/' . $newName;
     }
 
     /**
@@ -121,23 +126,35 @@ public function store(Request $request)
         $clean = trim($clean, "_");
         
         // Pastikan tidak kosong
-        if (empty($clean)) {
-            $clean = 'file_' . time();
-        }
-        
-        return $clean;
+        return $clean ?: 'file_' . time();
     }
 
-public function edit(Application $application)
-{
-    // Pastikan hanya mengembalikan view modal untuk AJAX request
-    if(request()->ajax() || request()->wantsJson()) {
-        return view('applications.edit', compact('application'));
+    /**
+     * Mendapatkan nama asli file dari path yang disimpan
+     */
+    public function getOriginalName($filePath)
+    {
+        if (empty($filePath)) {
+            return null;
+        }
+
+        $filename = basename($filePath);
+        
+        // Hilangkan counter duplikat jika ada (format: nama_1.ext)
+        if (preg_match('/^(.+)_\d+(\..+)$/', $filename, $matches)) {
+            return $matches[1] . $matches[2];
+        }
+        
+        return $filename;
     }
-    
-    // Jika perlu fallback untuk non-AJAX, bisa diarahkan ke halaman lain
-    return redirect()->route('applications.index');
-}
+
+    public function edit(Application $application)
+    {
+        if (request()->ajax() || request()->wantsJson()) {
+            return view('applications.edit', compact('application'));
+        }
+        return redirect()->route('applications.index');
+    }
 
     public function update(Request $request, Application $application)
     {
@@ -146,7 +163,7 @@ public function edit(Application $application)
             'interview_status' => 'sometimes|in:not yet,interviewed'
         ]);
 
-        $application->update($request->only('status','interview_status'));
+        $application->update($request->only('status', 'interview_status'));
 
         return redirect()->route('applications.index')
             ->with('success', 'Status lamaran berhasil diperbarui!');
@@ -154,29 +171,23 @@ public function edit(Application $application)
 
     public function destroy(Application $application)
     {
-        // Daftar file yang perlu dihapus
+        // Hapus file terkait dari public/data
         $filesToDelete = [
-            $application->photo,
-            $application->cv,
-            $application->cover_letter,
-            'merged_'.$application->id.'.pdf'
+            public_path($application->photo),
+            public_path($application->cv),
+            public_path($application->cover_letter),
+            storage_path('app/public/merged_' . $application->id . '.pdf')
         ];
 
-        // Hapus semua file terkait
         foreach ($filesToDelete as $file) {
-            try {
-                if ($file && Storage::disk('public')->exists($file)) {
-                    Storage::disk('public')->delete($file);
-                }
-            } catch (\Exception $e) {
-                \Log::error("Failed to delete file {$file}: " . $e->getMessage());
+            if (file_exists($file)) {
+                @unlink($file);
             }
         }
 
-        // Hapus record dari database
         $application->delete();
 
         return redirect()->route('applications.index')
-            ->with('success', 'Application Deleted Successfully!');
+            ->with('success', 'Lamaran berhasil dihapus!');
     }
 }

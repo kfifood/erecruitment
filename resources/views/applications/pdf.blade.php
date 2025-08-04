@@ -26,7 +26,7 @@
 
     <div class="photo">
         @if($application->photo)
-            <img src="{{ storage_path('app/public/' . $application->photo) }}" alt="Foto Pelamar">
+            <img src="{{ public_path($application->photo) }}" alt="Foto Pelamar">
         @else
             <p>[Tidak ada foto]</p>
         @endif

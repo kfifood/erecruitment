@@ -3,7 +3,7 @@
         <!-- Kolom Foto (diperkecil) -->
         <div class="col-md-2 text-center">
             @if($application->photo)
-                <img src="{{ Storage::url($application->photo) }}" alt="Foto Pelamar" class="img-thumbnail mb-3" style="max-width: 150px;">
+                <img src="{{ asset($application->photo) }}" alt="Foto Pelamar" class="img-thumbnail mb-3" style="max-width: 150px;">
             @else
                 <div class="text-muted mb-3">No photo</div>
             @endif

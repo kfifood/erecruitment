@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use iio\libmergepdf\Merger;
 use Illuminate\Support\Facades\Log;
 
@@ -39,10 +39,18 @@ class ApplicationPdfController extends Controller
 
     private function generateMergedPdf($application)
     {
+        $tempDir = storage_path('app/public');
+        if (!file_exists($tempDir)) {
+            mkdir($tempDir, 0777, true);
+        }
+
+        $dataPdfPath = '';
+        $mergedPdfPath = '';
+
         try {
             // 1. Buat PDF data pelamar
             $dataPdf = Pdf::loadView('applications.pdf', ['application' => $application]);
-            $dataPdfPath = storage_path('app/public/temp_data_'.$application->id.'.pdf');
+            $dataPdfPath = $tempDir.'/temp_data_'.$application->id.'.pdf';
             $dataPdf->save($dataPdfPath);
             
             // 2. Inisialisasi PDF merger
@@ -50,27 +58,25 @@ class ApplicationPdfController extends Controller
             $merger->addFile($dataPdfPath);
             
             // 3. Tambahkan cover letter jika ada
-            if ($application->cover_letter && Storage::disk('public')->exists($application->cover_letter)) {
-                $merger->addFile(Storage::disk('public')->path($application->cover_letter));
+            if ($application->cover_letter && file_exists(public_path($application->cover_letter))) {
+                $merger->addFile(public_path($application->cover_letter));
             }
             
             // 4. Tambahkan CV jika ada
-            if ($application->cv && Storage::disk('public')->exists($application->cv)) {
-                $merger->addFile(Storage::disk('public')->path($application->cv));
+            if ($application->cv && file_exists(public_path($application->cv))) {
+                $merger->addFile(public_path($application->cv));
             }
             
             // 5. Gabungkan semua PDF
-            $mergedPdfPath = storage_path('app/public/merged_'.$application->id.'.pdf');
+            $mergedPdfPath = $tempDir.'/merged_'.$application->id.'.pdf';
             file_put_contents($mergedPdfPath, $merger->merge());
-            
-            // 6. Hapus file temporary
-            @unlink($dataPdfPath);
             
             return $mergedPdfPath;
             
         } catch (\Exception $e) {
             Log::error("Error merging PDF: " . $e->getMessage());
-            @unlink($dataPdfPath ?? '');
+            if (file_exists($dataPdfPath)) @unlink($dataPdfPath);
+            if (file_exists($mergedPdfPath)) @unlink($mergedPdfPath);
             throw $e;
         }
     }

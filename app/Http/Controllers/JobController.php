@@ -102,4 +102,8 @@ class JobController extends Controller
                 ->with('error', 'Error deleting job position: ' . $e->getMessage());
         }
     }
+    public function show(Job $job)
+{
+    return view('jobs.show', compact('job'));
+}
 }

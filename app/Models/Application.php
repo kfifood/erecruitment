@@ -50,23 +50,28 @@ class Application extends Model
     {
         return $this->hasOne(Interview::class);
     }
-    // Di dalam model Application
-    public function getCvPathAttribute()
+
+    // Path accessors
+    public function getPhotoUrlAttribute()
     {
-        return Storage::disk('public')->path($this->cv);
+        return asset($this->photo);
     }
 
-    public function getCoverLetterPathAttribute()
+    public function getCvUrlAttribute()
     {
-        return Storage::disk('public')->path($this->cover_letter);
+        return asset($this->cv);
     }
-    // Tambahkan method untuk cek status interview
+
+    public function getCoverLetterUrlAttribute()
+    {
+        return asset($this->cover_letter);
+    }
+
     public function hasBeenInterviewed(): bool
     {
         return $this->interview_status === 'interviewed';
     }
 
-    // Method untuk sinkronisasi manual jika diperlukan
     public function syncInterviewStatus()
     {
         if ($this->interview) {

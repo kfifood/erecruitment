@@ -49,7 +49,7 @@
                         <tr>
                             <td>
                                 @if($application->photo)
-                                    <img src="{{ Storage::url($application->photo) }}" alt="Foto Pelamar" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <img src="{{ asset($application->photo) }}" alt="Foto Pelamar" style="width: 50px; height: 50px; object-fit: cover;">
                                 @else
                                     <span class="text-muted">No photo</span>
                                 @endif
@@ -82,7 +82,7 @@
                             </td>
                             <td>{{ $application->submitted_at->format('d M Y') }}</td>
                             <td>
-                                <a href="{{ Storage::url($application->cv) }}" 
+                                <a href="{{ asset($application->cv) }}" 
                                     target="_blank"
                                     title="Download CV"
                                     class="text-primary">
@@ -90,7 +90,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ Storage::url($application->cover_letter) }}" 
+                                <a href="{{ asset($application->cover_letter) }}" 
                                     target="_blank"
                                     title="Download Cover Letter"
                                     class="text-primary">
