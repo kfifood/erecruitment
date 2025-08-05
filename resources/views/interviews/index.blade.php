@@ -16,7 +16,7 @@
         <thead class="thead-light">
             <tr>
                 <th style="display: none;">Dummy</th>
-                <th >Date</th>
+                <th>Date</th>
                 <th>Candidate</th>
                 <th>Position</th>
                 <th>Time</th>
@@ -26,103 +26,98 @@
                 <th>Interview Status</th>
             </tr>
         </thead>
-<tbody>
-    @foreach($interviews as $date => $items)
-        @foreach($items as $index => $interview)
-        <tr>
-            <td style="display: none;">{{ $interview->id }}</td>
-            <!-- Kolom 1: Tanggal (rowspan hanya di baris pertama) -->
-            @if($index === 0)
+        <tbody>
+            @foreach($interviews as $date => $items)
+            @foreach($items as $index => $interview)
+            <tr>
+                <td style="display: none;">{{ $interview->id }}</td>
+                <!-- Kolom 1: Tanggal (rowspan hanya di baris pertama) -->
+                @if($index === 0)
                 <td rowspan="{{ $items->count() }}" class="align-middle bg-white">
                     <div class="fw-bold">{{ $interview->interview_date->format('d M Y') }}</div>
                     @if($items->contains('method', 'offsite'))
-                        <form action="{{ route('interviews.notify-security', $date) }}" method="POST" class="mt-2">
-                            @csrf
-                            <button type="submit" class="btn btn-sm btn-info w-100" 
-                                {{ $items[0]->isSecurityNotified() ? 'disabled' : '' }}>
-                                <i class="fas fa-bell"></i>
-                                {{ $items[0]->isSecurityNotified() ? 'Terkirim' : 'Kirim Satpam' }}
-                            </button>
-                        </form>
+                    <form action="{{ route('interviews.notify-security', $date) }}" method="POST" class="mt-2">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-info w-100"
+                            {{ $items[0]->isSecurityNotified() ? 'disabled' : '' }}>
+                            <i class="fas fa-bell"></i>
+                            {{ $items[0]->isSecurityNotified() ? 'Terkirim' : 'Kirim Satpam' }}
+                        </button>
+                    </form>
                     @endif
                 </td>
-            @endif
-            
-            <!-- Kolom 2: Kandidat -->
-            <td>{{ $interview->application->full_name }}</td>
-            
-            <!-- Kolom 3: Posisi -->
-            <td>{{ $interview->application->job->position }}</td>
-            
-            <!-- Kolom 4: Waktu Interview -->
-            <td>{{ $interview->interview_time->format('H:i') }}</td>
-            
-            <!-- Kolom 5: Kirim Undangan -->
-            <td>
-                <form action="{{ route('interviews.send-invitation', $interview->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-sm {{ $interview->invitation_sent_at ? 'btn-success' : 'btn-outline-success' }}"
-                        {{ !$interview->application->phone ? 'disabled' : '' }}>
-                        <i class="fab fa-whatsapp"></i>
-                        {{ $interview->invitation_sent_at ? 'Terkirim' : 'Kirim' }}
-                    </button>
-                </form>
-            </td>
-            
-            <!-- Kolom 6: Notifikasi Security -->
-            <td class="text-center">
-                @if($index === 0 && $items->contains('method', 'offsite'))
-                    @if($items[0]->isSecurityNotified())
-                        <span class="badge bg-success p-2 text-white">
-                            <i class="fas fa-check-circle"></i> Terkirim
-                        </span>
-                    @else
-                        <span class="badge bg-warning p-2 text-dark">
-                            <i class="fas fa-clock"></i> Pending
-                        </span>
-                    @endif
-                @else
-                    <span class="text-muted">-</span>
                 @endif
-            </td>
-            
-            <!-- Kolom 7: Aksi -->
-            <td>
-                <button class="btn btn-sm btn-warning edit-btn" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#editInterviewModal"
-                    data-id="{{ $interview->id }}"
-                    title="Edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <form action="{{ route('interviews.destroy', $interview->id) }}" 
-                      method="POST" 
-                      class="d-inline" 
-                      onsubmit="return confirm('Yakin ingin menghapus?');">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-sm btn-danger" title="Delete">
-                        <i class="fas fa-trash"></i>
+
+                <!-- Kolom 2: Kandidat -->
+                <td>{{ $interview->application->full_name }}</td>
+
+                <!-- Kolom 3: Posisi -->
+                <td>{{ $interview->application->job->position }}</td>
+
+                <!-- Kolom 4: Waktu Interview -->
+                <td>{{ $interview->interview_time->format('H:i') }}</td>
+
+                <!-- Kolom 5: Kirim Undangan -->
+                <td>
+                    <form action="{{ route('interviews.send-invitation', $interview->id) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="btn btn-sm {{ $interview->invitation_sent_at ? 'btn-success' : 'btn-outline-success' }}"
+                            {{ !$interview->application->phone ? 'disabled' : '' }}>
+                            <i class="fab fa-whatsapp"></i>
+                            {{ $interview->invitation_sent_at ? 'Terkirim' : 'Kirim' }}
+                        </button>
+                    </form>
+                </td>
+
+                <!-- Kolom 6: Notifikasi Security -->
+                <td class="text-center">
+                    @if($index === 0 && $items->contains('method', 'offsite'))
+                    @if($items[0]->isSecurityNotified())
+                    <span class="badge bg-success p-2 text-white">
+                        <i class="fas fa-check-circle"></i> Terkirim
+                    </span>
+                    @else
+                    <span class="badge bg-warning p-2 text-dark">
+                        <i class="fas fa-clock"></i> Pending
+                    </span>
+                    @endif
+                    @else
+                    <span class="text-muted">-</span>
+                    @endif
+                </td>
+
+                <!-- Kolom 7: Aksi -->
+                <td>
+                    <button class="btn btn-sm btn-warning edit-btn" data-bs-toggle="modal"
+                        data-bs-target="#editInterviewModal" data-id="{{ $interview->id }}" title="Edit">
+                        <i class="fas fa-edit"></i>
                     </button>
-                </form>
-            </td>
-            
-            <!-- Kolom 8: Status Interview -->
-            <td id="interview-status-{{ $interview->id }}">
-                @if($interview->interview_status === 'interviewed')
+                    <form action="{{ route('interviews.destroy', $interview->id) }}" method="POST" class="d-inline"
+                        onsubmit="return confirm('Yakin ingin menghapus?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+
+                <!-- Kolom 8: Status Interview -->
+                <td id="interview-status-{{ $interview->id }}">
+                    @if($interview->interview_status === 'interviewed')
                     <span class="badge bg-success">Interviewed</span>
-                @else
-                    <button class="btn btn-sm btn-primary mark-interviewed-btn" 
-                        data-interview-id="{{ $interview->id }}"
+                    @else
+                    <button class="btn btn-sm btn-primary mark-interviewed-btn" data-interview-id="{{ $interview->id }}"
                         id="mark-btn-{{ $interview->id }}">
                         <i class="fas fa-check"></i> Tandai Selesai
                     </button>
-                @endif
-            </td>
-        </tr>
-        @endforeach
-    @endforeach
-</tbody>
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+            @endforeach
+        </tbody>
     </table>
 </div>
 
@@ -151,7 +146,7 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="interviewer_id" class="form-label">Interviewer</label>
@@ -171,17 +166,19 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="interview_date" class="form-label">Interview Date</label>
-                                <input type="date" name="interview_date" id="interview_date" class="form-control" required>
+                                <input type="date" name="interview_date" id="interview_date" class="form-control"
+                                    required>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="interview_time" class="form-label">Time</label>
-                                <input type="time" name="interview_time" id="interview_time" class="form-control" required>
+                                <input type="time" name="interview_time" id="interview_time" class="form-control"
+                                    required>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="method" class="form-label">Method</label>
@@ -221,7 +218,7 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="editInterviewId" name="id">
-                    
+
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -229,7 +226,7 @@
                                 <p id="editCandidateName" class="form-control-plaintext"></p>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="editInterviewerId" class="form-label">Interviewer</label>
@@ -249,17 +246,19 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="editInterviewDate" class="form-label">Interview Date</label>
-                                <input type="date" name="interview_date" id="editInterviewDate" class="form-control" required>
+                                <input type="date" name="interview_date" id="editInterviewDate" class="form-control"
+                                    required>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="editInterviewTime" class="form-label">Time</label>
-                                <input type="time" name="interview_time" id="editInterviewTime" class="form-control" required>
+                                <input type="time" name="interview_time" id="editInterviewTime" class="form-control"
+                                    required>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="editMethod" class="form-label">Method</label>
@@ -305,82 +304,82 @@
 @push('scripts')
 
 <script>
-    $(document).ready(function() {
-        // Initialize modals
-        const interviewModal = new bootstrap.Modal(document.getElementById('interviewModal'));
-        const editInterviewModal = new bootstrap.Modal(document.getElementById('editInterviewModal'));
+$(document).ready(function() {
+    // Initialize modals
+    const interviewModal = new bootstrap.Modal(document.getElementById('interviewModal'));
+    const editInterviewModal = new bootstrap.Modal(document.getElementById('editInterviewModal'));
 
-        // Reset form when create modal is closed
-        document.getElementById('interviewModal').addEventListener('hidden.bs.modal', function() {
-            document.getElementById('interviewForm').reset();
-        });
+    // Reset form when create modal is closed
+    document.getElementById('interviewModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('interviewForm').reset();
+    });
 
-        
-        // Handle create form submission
-        $('#interviewForm').on('submit', function(e) {
-            e.preventDefault();
-            const form = $(this);
-            const formData = new FormData(this);
-            const submitBtn = form.find('button[type="submit"]');
-            const originalBtnText = submitBtn.html();
 
-            // Validate required fields
-            if (!$('#application_id').val() || !$('#interviewer_id').val() || 
-                !$('#interview_date').val() || !$('#interview_time').val()) {
-                Swal.fire('Error', 'Harap isi semua field yang wajib diisi!', 'error');
-                return;
-            }
+    // Handle create form submission
+    $('#interviewForm').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const formData = new FormData(this);
+        const submitBtn = form.find('button[type="submit"]');
+        const originalBtnText = submitBtn.html();
 
-            // Show loading
-            submitBtn.prop('disabled', true).html(`
+        // Validate required fields
+        if (!$('#application_id').val() || !$('#interviewer_id').val() ||
+            !$('#interview_date').val() || !$('#interview_time').val()) {
+            Swal.fire('Error', 'Harap isi semua field yang wajib diisi!', 'error');
+            return;
+        }
+
+        // Show loading
+        submitBtn.prop('disabled', true).html(`
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Menyimpan...
             `);
 
-            // Submit form via AJAX
-            $.ajax({
-                url: '/interviews',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        interviewModal.hide();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Jadwal interview berhasil dibuat',
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire('Error', response.message || 'Gagal membuat jadwal', 'error');
-                    }
-                },
-                error: function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan saat menyimpan';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    Swal.fire('Error', errorMessage, 'error');
-                },
-                complete: function() {
-                    submitBtn.prop('disabled', false).html(originalBtnText);
+        // Submit form via AJAX
+        $.ajax({
+            url: '/interviews',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    interviewModal.hide();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Jadwal interview berhasil dibuat',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', response.message || 'Gagal membuat jadwal', 'error');
                 }
-            });
+            },
+            error: function(xhr) {
+                let errorMessage = 'Terjadi kesalahan saat menyimpan';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire('Error', errorMessage, 'error');
+            },
+            complete: function() {
+                submitBtn.prop('disabled', false).html(originalBtnText);
+            }
         });
+    });
 
-        // Handle edit modal show event
-       // Handle edit modal show event
-document.getElementById('editInterviewModal').addEventListener('show.bs.modal', function(event) {
-    const button = event.relatedTarget;
-    const interviewId = button.getAttribute('data-id');
-    
-    // Show loading
-    $(this).find('.modal-body').prepend(`
+    // Handle edit modal show event
+    // Handle edit modal show event
+    document.getElementById('editInterviewModal').addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const interviewId = button.getAttribute('data-id');
+
+        // Show loading
+        $(this).find('.modal-body').prepend(`
         <div class="loading-overlay">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -388,209 +387,220 @@ document.getElementById('editInterviewModal').addEventListener('show.bs.modal', 
             <p class="mt-2">Memuat data interview...</p>
         </div>
     `);
-    
-    // Fetch interview data
-    $.ajax({
-        url: `/interviews/${interviewId}/edit`,
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            if (response.success && response.data) {
-                const data = response.data;
-                
-                // Fill form
-                $('#editInterviewId').val(data.id);
-                $('#editCandidateName').text(
-                    `${data.application.full_name} - ${data.application.job.position}`
-                );
-                $('#editInterviewerId').val(data.interviewer_id).trigger('change');
-                $('#editInterviewDate').val(data.interview_date);
-                $('#editInterviewTime').val(data.interview_time);
-                $('#editMethod').val(data.method);
-                $('#editInterviewStatus').val(data.interview_status);
-                $('#editNotes').val(data.notes);
-                
-                // Set form action
-                $('#editInterviewForm').attr('action', `/interviews/${interviewId}`);
-            } else {
-                editInterviewModal.hide();
-                Swal.fire('Error', response.message || 'Gagal memuat data', 'error');
-            }
-        },
-        error: function(xhr) {
-            editInterviewModal.hide();
-            Swal.fire('Error', xhr.responseJSON?.message || 'Terjadi kesalahan', 'error');
-        },
-        complete: function() {
-            $('.loading-overlay').remove();
-        }
-    });
-});
 
-        // Handle edit form submission
-        $('#editInterviewForm').on('submit', function(e) {
-            e.preventDefault();
-            const form = $(this);
-            const formData = new FormData(this);
-            const url = form.attr('action');
-            const submitBtn = form.find('button[type="submit"]');
-            const originalBtnText = submitBtn.html();
-            
-            // Show loading
-            submitBtn.prop('disabled', true).html(`
+        // Fetch interview data
+        $.ajax({
+            url: `/interviews/${interviewId}/edit`,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success && response.data) {
+                    const data = response.data;
+
+                    // Fill form
+                    $('#editInterviewId').val(data.id);
+                    $('#editCandidateName').text(
+                        `${data.application.full_name} - ${data.application.job.position}`
+                    );
+                    $('#editInterviewerId').val(data.interviewer_id).trigger('change');
+                    $('#editInterviewDate').val(data.interview_date);
+                    $('#editInterviewTime').val(data.interview_time);
+                    $('#editMethod').val(data.method);
+                    $('#editInterviewStatus').val(data.interview_status);
+                    $('#editNotes').val(data.notes);
+
+                    // Set form action
+                    $('#editInterviewForm').attr('action', `/interviews/${interviewId}`);
+                } else {
+                    editInterviewModal.hide();
+                    Swal.fire('Error', response.message || 'Gagal memuat data', 'error');
+                }
+            },
+            error: function(xhr) {
+                editInterviewModal.hide();
+                Swal.fire('Error', xhr.responseJSON?.message || 'Terjadi kesalahan',
+                    'error');
+            },
+            complete: function() {
+                $('.loading-overlay').remove();
+            }
+        });
+    });
+
+    // Handle edit form submission
+    $('#editInterviewForm').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const formData = new FormData(this);
+        const url = form.attr('action');
+        const submitBtn = form.find('button[type="submit"]');
+        const originalBtnText = submitBtn.html();
+
+        // Show loading
+        submitBtn.prop('disabled', true).html(`
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Menyimpan...
             `);
-            
-            // Submit via AJAX
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        editInterviewModal.hide();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Data interview berhasil diperbarui',
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire('Error', response.message || 'Gagal memperbarui', 'error');
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire('Error', xhr.responseJSON?.message || 'Terjadi kesalahan', 'error');
-                },
-                complete: function() {
-                    submitBtn.prop('disabled', false).html(originalBtnText);
-                }
-            });
-        });
 
-$(document).on('click', '.mark-interviewed-btn', function() {
-    const interviewId = $(this).data('interview-id');
-    const button = $(this);
-    const statusCell = $(`#interview-status-${interviewId}`);
-    
-    Swal.fire({
-        title: 'Konfirmasi',
-        text: 'Tandai interview ini sebagai sudah selesai?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Tandai',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Tampilkan loading
-            button.html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
-            button.prop('disabled', true);
-            
-            // Kirim request AJAX
-            $.ajax({
-                url: `/interviews/${interviewId}/mark-interviewed`,
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    _method: 'PUT'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Update tampilan tanpa reload
-                        statusCell.html('<span class="badge bg-success">Interviewed</span>');
-                        
-                        // Tampilkan notifikasi sukses
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Status interview telah diperbarui',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                    } else {
-                        button.html('<i class="fas fa-check"></i> Mark as Interviewed');
-                        button.prop('disabled', false);
-                        Swal.fire('Error', response.message || 'Gagal memperbarui status', 'error');
-                    }
-                },
-                error: function(xhr) {
-                    button.html('<i class="fas fa-check"></i> Mark as Interviewed');
-                    button.prop('disabled', false);
-                    
-                    let errorMessage = 'Terjadi kesalahan saat memperbarui status';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    Swal.fire('Error', errorMessage, 'error');
+        // Submit via AJAX
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    editInterviewModal.hide();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Data interview berhasil diperbarui',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', response.message || 'Gagal memperbarui', 'error');
                 }
-            });
-        }
+            },
+            error: function(xhr) {
+                Swal.fire('Error', xhr.responseJSON?.message || 'Terjadi kesalahan',
+                    'error');
+            },
+            complete: function() {
+                submitBtn.prop('disabled', false).html(originalBtnText);
+            }
+        });
+    });
+
+    $(document).on('click', '.mark-interviewed-btn', function() {
+        const interviewId = $(this).data('interview-id');
+        const button = $(this);
+        const statusCell = $(`#interview-status-${interviewId}`);
+
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Tandai interview ini sebagai sudah selesai?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Tandai',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Tampilkan loading
+                button.html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
+                button.prop('disabled', true);
+
+                // Kirim request AJAX
+                $.ajax({
+                    url: `/interviews/${interviewId}/mark-interviewed`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'PUT'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update tampilan tanpa reload
+                            statusCell.html(
+                                '<span class="badge bg-success">Interviewed</span>'
+                                );
+
+                            // Tampilkan notifikasi sukses
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Status interview telah diperbarui',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            button.html(
+                                '<i class="fas fa-check"></i> Mark as Interviewed'
+                                );
+                            button.prop('disabled', false);
+                            Swal.fire('Error', response.message ||
+                                'Gagal memperbarui status', 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        button.html(
+                            '<i class="fas fa-check"></i> Mark as Interviewed');
+                        button.prop('disabled', false);
+
+                        let errorMessage =
+                            'Terjadi kesalahan saat memperbarui status';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        Swal.fire('Error', errorMessage, 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    // SweetAlert for flash messages
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: '{{ session('
+        success ') }}',
+        timer: 3000,
+        showConfirmButton: false
+    });
+    @elseif(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: '{{ session('
+        error ') }}',
+        timer: 3000,
+        showConfirmButton: false
+    });
+    @endif
+
+    // Confirmation for sending invitation
+    $(document).on('submit', 'form[action*="send-invitation"]', function(e) {
+        e.preventDefault();
+        const form = this;
+
+        Swal.fire({
+            title: 'Kirim Undangan?',
+            text: 'Anda yakin ingin mengirim undangan interview?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Kirim',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+
+    // Confirmation for notifying security
+    $(document).on('submit', 'form[action*="notify-security"]', function(e) {
+        e.preventDefault();
+        const form = this;
+
+        Swal.fire({
+            title: 'Kirim Notifikasi?',
+            text: 'Anda yakin ingin mengirim notifikasi ke satpam?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Kirim',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
     });
 });
-
-        // SweetAlert for flash messages
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: '{{ session('success') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @elseif(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: '{{ session('error') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
-
-        // Confirmation for sending invitation
-        $(document).on('submit', 'form[action*="send-invitation"]', function(e) {
-            e.preventDefault();
-            const form = this;
-            
-            Swal.fire({
-                title: 'Kirim Undangan?',
-                text: 'Anda yakin ingin mengirim undangan interview?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Kirim',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-
-        // Confirmation for notifying security
-        $(document).on('submit', 'form[action*="notify-security"]', function(e) {
-            e.preventDefault();
-            const form = this;
-            
-            Swal.fire({
-                title: 'Kirim Notifikasi?',
-                text: 'Anda yakin ingin mengirim notifikasi ke satpam?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Kirim',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
 </script>
 @endpush

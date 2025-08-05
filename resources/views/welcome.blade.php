@@ -83,8 +83,8 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('jobs.show.public', $job->id) }}" class="btn btn-outline-primary w-100 py-2" style="font-size: 0.9rem;">
-                        Lihat Detail <i class="fas fa-chevron-right ms-2"></i>
+                    <a href="{{ route('jobs.show.public', $job->id) }}" target="_blank" class="btn btn-outline-primary w-100 py-2" style="font-size: 0.9rem;">
+                        Lihat dan Lamar<i class="fas fa-chevron-right ms-2"></i>
                     </a>
                 </div>
             </div>
@@ -109,9 +109,9 @@
                 <div class="col-md-12 text-center">
                     <p class="mb-0">&copy; 2025. PT Kirana Food International. All rights reserved.</p>
                     <div class="icon-sosmed">
-                        <a href="#" class="mx-2" style="color: var(--bluedark-color);"><i class="fas fa-globe"></i></a>
-                        <a href="#" class="mx-2" style="color: var(--bluedark-color);"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="mx-2" style="color: var(--bluedark-color);"><i class="fab fa-instagram"></i></a>
+                        <a href="https://kfifood.com/" class="mx-2" target="_blank" style="color: var(--bluedark-color);"><i class="fas fa-globe"></i></a>
+                        <a href="https://www.linkedin.com/company/kirana-food-international/" target="_blank" class="mx-2" style="color: var(--bluedark-color);"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/kiranafood.international/" class="mx-2" target="_blank" style="color: var(--bluedark-color);"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>

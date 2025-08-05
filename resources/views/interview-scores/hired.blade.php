@@ -51,9 +51,11 @@
                                             <div class="strength-bar">
                                                 <div class="strength-fill" style="width: {{ ($value/9)*100 }}%">
                                                     <span class="aspect-label">{{ $aspect }}</span>
-                                                    <span class="aspect-score">{{ $value }}/9</span>
+                                                    
                                                 </div>
+                                                <span class="aspect-score">{{ $value }}/9</span>
                                             </div>
+                                            
                                         @endforeach
                                         
                                         <div class="weakness-header">
@@ -64,8 +66,9 @@
                                             <div class="weakness-bar">
                                                 <div class="weakness-fill" style="width: {{ ($value/9)*100 }}%">
                                                     <span class="aspect-label">{{ $aspect }}</span>
-                                                    <span class="aspect-score">{{ $value }}/9</span>
+                                                    
                                                 </div>
+                                                <span class="aspect-score">{{ $value }}/9</span>
                                             </div>
                                         @endforeach
                                     </div>
