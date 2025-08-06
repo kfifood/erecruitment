@@ -25,11 +25,11 @@ class WablasService
         'message' => $message
     ]);
 
-    \Log::info('Wablas API Response', [
+    /*\Log::info('Wablas API Response', [
         'phone' => $phone,
         'status' => $response->status(),
         'response' => $response->json()
-    ]);
+    ]);*/
 
     return $response;
 }
