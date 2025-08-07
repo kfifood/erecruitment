@@ -73,15 +73,16 @@
         <li class="submenu-item {{ request()->routeIs('interview-scores.unscored') ? 'active' : '' }}">
             <a href="{{ route('interview-scores.unscored') }}">Belum Dinilai</a>
         </li>
+         <li class="submenu-item {{ request()->routeIs('interview-scores.undecided') ? 'active' : '' }}">
+            <a href="{{ route('interview-scores.undecided') }}">Belum Diputuskan</a>
+        </li>
         <li class="submenu-item {{ request()->routeIs('interview-scores.hired') ? 'active' : '' }}">
             <a href="{{ route('interview-scores.hired') }}">Kandidat Hired</a>
         </li>
         <li class="submenu-item {{ request()->routeIs('interview-scores.unhired') ? 'active' : '' }}">
             <a href="{{ route('interview-scores.unhired') }}">Kandidat Unhired</a>
         </li>
-        <li class="submenu-item {{ request()->routeIs('interview-scores.undecided') ? 'active' : '' }}">
-            <a href="{{ route('interview-scores.undecided') }}">Belum Diputuskan</a>
-        </li>
+       
     </ul>
 </li>
 
