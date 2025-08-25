@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,25 +10,92 @@ class Application extends Model
 
     protected $fillable = [
         'job_id',
+        'job_type',
         'full_name',
         'email',
         'phone',
         'address',
-        'education',
-        'major',
-        'study_program',
+        'birth_place',
         'birth_date',
+        'gender',
+        'home_phone',
+        'id_number',
+        'religion',
+        'ethnicity',
+        'height',
+        'weight',
+        'house_ownership',
+        'vehicle_ownership',
+        'marital_status',
+        'family_members',
         'photo',
         'cv',
         'cover_letter',
         'status',
-        'interview_status'
+        'interview_status',
+        'strengths',
+        'weaknesses'
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
         'birth_date' => 'date',
     ];
+    
+    // Tambahkan relasi ke tabel-tabel baru
+    public function educations()
+    {
+        return $this->hasMany(ApplicationEducation::class);
+    }
+    
+    public function certificates()
+    {
+        return $this->hasMany(ApplicationCertificate::class);
+    }
+    
+    public function references()
+    {
+        return $this->hasMany(ApplicationReference::class);
+    }
+    
+    public function emergencyContacts()
+    {
+        return $this->hasMany(ApplicationEmergencyContact::class);
+    }
+    
+    public function languageSkills()
+    {
+        return $this->hasMany(ApplicationLanguageSkill::class);
+    }
+    
+    public function computerSkills()
+    {
+        return $this->hasMany(ApplicationComputerSkill::class);
+    }
+    
+    public function socialActivities()
+    {
+        return $this->hasMany(ApplicationSocialActivity::class);
+    }
+    
+    public function employmentHistories()
+    {
+        return $this->hasMany(ApplicationEmploymentHistory::class);
+    }
+    
+    public function familyMembers()
+    {
+        return $this->hasMany(ApplicationFamilyMember::class);
+    }
+    // Tambahkan relasi baru
+    public function questions()
+    {
+    return $this->hasOne(ApplicationQuestion::class);
+    }
+    public function productionQuestions()
+    {
+    return $this->hasOne(ApplicationProductionQuestion::class);
+    }
     
     public function job()
     {
@@ -78,5 +144,20 @@ class Application extends Model
             $this->interview_status = $this->interview->interview_status;
             $this->save();
         }
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($application) {
+            if ($application->job) {
+                $application->job_type = $application->job->recruitment_type;
+            }
+        });
+    }
+
+    // Accessor untuk job_type
+    public function getJobTypeNameAttribute()
+    {
+        return $this->job_type ? ucfirst(str_replace('_', ' ', $this->job_type)) : null;
     }
 }

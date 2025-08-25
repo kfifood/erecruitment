@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>K-JOBS - {{ config('app.name', 'Laravel') }}</title>
+    <title>K-JOBS</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
                 <div class="col-lg-6 order-lg-1 order-2">
                     <h2 class="welcome_title animate__animated animate__fadeInUp">
                         Selamat Datang di <span class="highlight-text">K-JOBS</span><br>
-                        <small class="fs-4" style="color: var(--bluedark-color);">PT KFI Job Opportunity & Bridging</small>
+                        <small class="fs-4" style="color: var(--bluedark-color);">PT Kirana Food International Job Opportunity & Bridging</small>
                     </h2>
                     <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s" style="color: var(--text-secondary);">
                         Temukan karir impian Anda dan bergabunglah dengan tim profesional kami yang dinamis dan inovatif.

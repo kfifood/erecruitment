@@ -324,7 +324,7 @@
                     <!-- Kesimpulan -->
                     <div class="mb-4">
                         <h5 class="mb-3 fw-bold" style="font-size: 1.2rem; border-bottom: 2px solid #30318b; padding-bottom: 5px; color: #30318B;">
-                            <i class="fas fa-clipboard-list me-2"></i>KESIMPULAN
+                            <i class="fas fa-clipboard-list me-2"></i>CATATAN/KESIMPULAN
                         </h5>
                         <textarea name="notes" class="form-control" rows="4" placeholder="Masukkan kesimpulan hasil wawancara..."></textarea>
                     </div>
@@ -354,7 +354,7 @@
                         <button type="submit" class="btn" style="background-color:#30318B; color:white;">
                             <i class="fas fa-save"></i> Simpan Penilaian
                         </button>
-                        <a href="{{ route('interview-scores.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('interviews.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                     </div>

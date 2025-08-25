@@ -445,7 +445,7 @@ input[type="radio"]:checked::before {
         <div class="card-body" style="background-color: #fff; padding: 20px; border: 1px solid #ddd;">
             <!-- Kesimpulan -->
             <div class="form-notes mb-4" style="background-color: #fff">
-                <label style="font-weight: bold;">Kesimpulan:</label>
+                <label style="font-weight: bold;">Kesimpulan / Catatan:</label>
                 <p class="form-control-plaintext">{{ $interviewScore->notes ?? 'Tidak ada catatan' }}</p>
             </div>
 
@@ -499,7 +499,7 @@ input[type="radio"]:checked::before {
         </div>
 
         <div class="text-center mt-3">
-            <a href="{{ route('interview-scores.hired') }}" class="btn btn-secondary">
+            <a href="{{ route('interview-scores.office-hired') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar Hired
             </a>
         </div>

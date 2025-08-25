@@ -9,7 +9,6 @@
 ➡ *{{ $loop->iteration }}. {{ $interview->application->full_name }}*
 - Posisi : {{ $interview->application->job->position }}
 - Jam    : {{ $interview->interview_time->format('H:i') }}
-- No. HP : {{ $interview->application->phone }}
 @endforeach
 
 *Total: {{ count($interviews) }} kandidat*

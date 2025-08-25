@@ -1,9 +1,12 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center px-4">
-        <!-- Kiri: Brand -->
-        <a class="navbar-brand" href="{{ url('/') }}">
-            K-JOBS
-        </a>
+    <div class="container-fluid d-flex align-items-center px-4">
+        <!-- Logo dan Brand -->
+        <div class="d-flex align-items-center">
+            <img src="{{ asset('logo.png') }}" alt="Kirana Logo" class="logo-img" style="height: 27px;" />
+            <a class="navbar-brand ms-2" href="{{ url('/') }}">
+                K-JOBS
+            </a>
+        </div>
 
         <!-- Kanan: Auth -->
         @auth

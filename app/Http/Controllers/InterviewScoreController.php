@@ -92,7 +92,7 @@ class InterviewScoreController extends Controller
 
         $score->update($validated);
 
-        return redirect()->route('interview-scores.undecided')
+        return redirect()->route('interview-scores.office-undecided')
                ->with('success', 'Keputusan berhasil diperbarui!');
     }
 
@@ -160,7 +160,7 @@ public function hired()
         ->with(['interview.application.job', 'interview.interviewer.user'])
         ->paginate(10);
         
-    return view('interview-scores.hired', compact('scores'));
+    return view('interview-scores.office-hired', compact('scores'));
 }
 
 public function unhired()
@@ -221,4 +221,153 @@ public function unhiredDetail($id)
 
     return view('interview-scores.unhired-detail', compact('score'));
 }
+
+
+// Office Unscored
+    public function officeUnscored()
+    {
+        $interviews = Interview::where('interview_status', 'interviewed')
+            ->whereDoesntHave('score')
+            ->whereHas('application', function($query) {
+                $query->where('job_type', 'office');
+            })
+            ->with(['application.job', 'interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.office-unscored', compact('interviews'));
+    }
+
+    // Office Undecided
+    public function officeUndecided()
+    {
+        $scores = InterviewScore::whereNull('decision')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'office');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.office-undecided', compact('scores'));
+    }
+
+    // Office Hired
+    public function officeHired()
+    {
+        $scores = InterviewScore::where('decision', 'hired')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'office');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.office-hired', compact('scores'));
+    }
+
+    // Office Unhired
+    public function officeUnhired()
+    {
+        $scores = InterviewScore::where('decision', 'unhired')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'office');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.office-unhired', compact('scores'));
+    }
+
+    // Production Unscored
+    public function productionUnscored()
+    {
+        $interviews = Interview::where('interview_status', 'interviewed')
+            ->whereDoesntHave('score')
+            ->whereHas('application', function($query) {
+                $query->where('job_type', 'production');
+            })
+            ->with(['application.job', 'interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.production-unscored', compact('interviews'));
+    }
+
+    // Production Undecided
+    public function productionUndecided()
+    {
+        $scores = InterviewScore::whereNull('decision')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'production');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.production-undecided', compact('scores'));
+    }
+
+    // Production Hired
+    public function productionHired()
+    {
+        $scores = InterviewScore::where('decision', 'hired')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'production');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.production-hired', compact('scores'));
+    }
+
+    // Production Unhired
+    public function productionUnhired()
+    {
+        $scores = InterviewScore::where('decision', 'unhired')
+            ->whereHas('interview.application', function($query) {
+                $query->where('job_type', 'production');
+            })
+            ->with(['interview.application.job', 'interview.interviewer.user'])
+            ->paginate(10);
+            
+        return view('interview-scores.production-unhired', compact('scores'));
+    }
+
+    // Store Production Score
+    public function storeProduction(Request $request)
+    {
+        $validated = $request->validate([
+            'interview_id' => 'required|exists:interviews,id',
+            'recommendation' => 'required|in:recommended,considered,not_recommended',
+            'notes' => 'nullable|string'
+        ]);
+
+        // Simpan data penilaian produksi
+        $score = InterviewScore::create([
+            'interview_id' => $validated['interview_id'],
+            'recommendation' => $validated['recommendation'],
+            'notes' => $validated['notes'],
+            // Field lain bisa diisi default atau dikosongkan
+            'appearance' => 0,
+            'experience' => 0,
+            'work_motivation' => 0,
+            'problem_solving' => 0,
+            'leadership' => 0,
+            'communication' => 0,
+            'job_knowledge' => 0,
+            'final_score' => $this->calculateProductionScore($validated['recommendation'])
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Penilaian produksi berhasil disimpan'
+        ]);
+    }
+
+    private function calculateProductionScore($recommendation)
+    {
+        // Beri skor berdasarkan rekomendasi
+        switch($recommendation) {
+            case 'recommended': return 9;
+            case 'considered': return 6;
+            case 'not_recommended': return 3;
+            default: return 0;
+        }
+    }
 }

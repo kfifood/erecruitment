@@ -197,15 +197,6 @@
             </ul>
                 <div class="section-divider"></div>
 
-            <h3 class="section-title">Deskripsi Pekerjaan</h3>
-            <ul class="description-list">
-                @foreach(explode("\n", $job->description) as $desc)
-                    @if(trim($desc))
-                        <li>{{ trim($desc) }}</li>
-                    @endif
-                @endforeach
-            </ul>
-
             <div class="section-divider"></div>
         </div>
 

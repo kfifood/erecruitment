@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('jobs', function (Blueprint $table) {
     $table->id();
     $table->string('position');
-    $table->text('description');
     $table->text('qualification');
     $table->foreignId('division_id')->nullable()->constrained()->onDelete('set null');
     $table->string('location');

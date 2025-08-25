@@ -2,26 +2,100 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Data Pelamar - {{ $application->full_name }}</title>
+    <title>BIODATA PELAMAR - {{ $application->full_name }}</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #30318B; margin-bottom: 5px; }
-        .header p { color: #666; margin-top: 0; }
-        .photo { text-align: center; margin-bottom: 20px; }
-        .photo img { max-width: 150px; border: 1px solid #ddd; }
-        .section { margin-bottom: 15px; page-break-inside: avoid; }
-        .section h2 { color: #30318B; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        .info-table td { padding: 8px; border-bottom: 1px solid #eee; }
-        .info-table td:first-child { width: 30%; font-weight: bold; }
-        .footer { margin-top: 30px; text-align: right; font-size: 12px; color: #666; }
+        body { 
+            font-family: Arial, sans-serif; 
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 10px;
+        }
+        .header h1 { 
+            color: #000; 
+            margin-bottom: 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .header p { 
+            color: #000;
+            margin-top: 0;
+            font-size: 12px;
+        }
+        .photo { 
+            float: right; 
+            margin: 0 0 10px 10px;
+            text-align: center;
+        }
+        .photo img { 
+            width: 120px; 
+            height: 160px;
+            border: 1px solid #ddd;
+            object-fit: cover;
+        }
+        .section { 
+            margin-bottom: 15px; 
+            page-break-inside: avoid;
+        }
+        .section h2 { 
+            color: #000; 
+            font-size: 14px; 
+            border-bottom: 1px solid #000;
+            padding-bottom: 3px;
+            margin-bottom: 8px;
+        }
+        .info-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 10px;
+        }
+        .info-table th, 
+        .info-table td { 
+            padding: 5px; 
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        .info-table th { 
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .footer { 
+            margin-top: 30px; 
+            text-align: right; 
+            font-size: 10px; 
+            color: #666;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .form-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-value {
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #000;
+            min-height: 20px;
+        }
+        .form-group {
+            margin-bottom: 8px;
+        }
+        .inline-group {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .clearfix {
+            clear: both;
+        }
     </style>
 </head>
 <body>
+    <!-- Halaman 1: Data Pribadi dan Keluarga -->
     <div class="header">
-        <h1>PT Kirana Food International</h1>
-        <p>Data Pelamar Pekerjaan</p>
+        <h1>BIODATA PELAMAR</h1>
+        <p>Curriculum Vitae of Employee</p>
     </div>
 
     <div class="photo">
@@ -32,95 +106,371 @@
         @endif
     </div>
 
+    <div class="form-group">
+        <div class="form-title">No : /HRD/ / /</div>
+    </div>
+
     <div class="section">
-        <h2>Informasi Pribadi</h2>
         <table class="info-table">
+            <tr>
+                <td width="30%">Pekerjaan Yang Dilamar</td>
+                <td>{{ $application->job->position }}</td>
+            </tr>
             <tr>
                 <td>Nama Lengkap</td>
                 <td>{{ $application->full_name }}</td>
             </tr>
             <tr>
-                <td>Posisi Dilamar</td>
-                <td>{{ $application->job->position }}</td>
+                <td>Tempat/Tanggal Lahir</td>
+                <td>{{ $application->birth_place }}, {{ $application->birth_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td>Email</td>
-                <td>{{ $application->email }}</td>
+                <td>Alamat Rumah</td>
+                <td>{{ $application->address }}</td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td width="25%">Telepon Rumah</td>
+                <td width="25%">{{ $application->home_phone ?? '-' }}</td>
+                <td width="25%">No. KTP / SIM</td>
+                <td width="25%">{{ $application->id_number }}</td>
             </tr>
             <tr>
-                <td>Telepon</td>
+                <td>Tinggi / Berat</td>
+                <td>{{ $application->height }} cm / {{ $application->weight }} kg</td>
+                <td>Kepemilikan Rumah</td>
+                <td>{{ ucfirst($application->house_ownership) }}</td>
+            </tr>
+            <tr>
+                <td>Kepemilikan Kendaraan</td>
+                <td>{{ ucfirst($application->vehicle_ownership) }}</td>
+                <td>Status Perkawinan</td>
+                <td>{{ ucfirst($application->marital_status) }}</td>
+            </tr>
+            <tr>
+                <td>Jenis Kelamin</td>
+                <td>{{ $application->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                <td>HP</td>
                 <td>{{ $application->phone }}</td>
             </tr>
             <tr>
-                <td>Alamat</td>
-                <td>{{ $application->address }}</td>
-            </tr>
-            <tr>
-                <td>Tanggal Lahir</td>
-                <td>{{ $application->birth_date->format('d F Y') }}</td>
+                <td>Agama</td>
+                <td>{{ $application->religion }}</td>
+                <td>Gm / Gkg</td>
+                <td>-</td>
             </tr>
         </table>
     </div>
 
     <div class="section">
-        <h2>Informasi Pendidikan</h2>
+        <h2>Susunan Keluarga</h2>
         <table class="info-table">
-            <tr>
-                <td>Pendidikan Terakhir</td>
-                <td>{{ $application->education }}</td>
-            </tr>
-            @if($application->major)
-            <tr>
-                <td>Jurusan</td>
-                <td>{{ $application->major }}</td>
-            </tr>
-            @endif
-            @if($application->study_program)
-            <tr>
-                <td>Program Studi</td>
-                <td>{{ $application->study_program }}</td>
-            </tr>
-            @endif
+            <thead>
+                <tr>
+                    <th width="15%">Keluarga</th>
+                    <th width="20%">Nama</th>
+                    <th width="10%">L/P</th>
+                    <th width="15%">Tanggal Lahir</th>
+                    <th width="20%">Pekerjaan Terakhir</th>
+                    <th width="20%">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->family_members_data ?? [] as $member)
+                <tr>
+                    <td>{{ ucfirst($member['family_role']) }}</td>
+                    <td>{{ $member['name'] }}</td>
+                    <td>{{ $member['gender'] == 'L' ? 'L' : 'P' }}</td>
+                    <td>{{ $member['birth_date'] ?? '-' }}</td>
+                    <td>{{ $member['last_position'] ?? '-' }}</td>
+                    <td>{{ $member['last_company'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
     </div>
 
     <div class="section">
-        <h2>Informasi Lamaran</h2>
+        <h2>Riwayat Pendidikan (Formal / Informal)</h2>
         <table class="info-table">
-            <tr>
-                <td>Status</td>
-                <td>
-                    <span style="color: 
-                        @if($application->status == 'submitted') #6c757d
-                        @elseif($application->status == 'interview') #0d6efd
-                        @else #dc3545 @endif">
-                        {{ ucfirst($application->status) }}
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td>Tanggal Melamar</td>
-                <td>{{ $application->submitted_at->format('d F Y H:i') }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="section">
-        <h2>Dokumen Lampiran</h2>
-        <table class="info-table">
-            <tr>
-                <td>Curriculum Vitae (CV)</td>
-                <td>{{ basename($application->cv) }}</td>
-            </tr>
-            <tr>
-                <td>Surat Lamaran</td>
-                <td>{{ basename($application->cover_letter) }}</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="15%">Tingkat</th>
+                    <th width="25%">Nama Sekolah</th>
+                    <th width="15%">Kota</th>
+                    <th width="15%">Jurusan</th>
+                    <th width="15%">Dari Thn. s/d Thn.</th>
+                    <th width="10%">Lulus / Tidak Lulus</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->educations ?? [] as $index => $edu)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $edu['education_level'] }}</td>
+                    <td>{{ $edu['school_name'] }}</td>
+                    <td>{{ $edu['city'] }}</td>
+                    <td>{{ $edu['major'] ?? '-' }}</td>
+                    <td>{{ $edu['start_year'] }} - {{ $edu['end_year'] }}</td>
+                    <td>Lulus</td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
     </div>
 
     <div class="footer">
-        Dicetak pada {{ now()->format('d F Y H:i') }}
+        <div>No. Dokumen : FF/KFI/VII-01.01</div>
+        <div>Edisi/Revisi : 1/0</div>
+        <div>Tanggal : 1-02-2021</div>
+        <div>Halaman : 1 dari 3</div>
+    </div>
+
+    <!-- Halaman 2: Kursus, Referensi, Bahasa, Komputer, Kegiatan Sosial -->
+    <div class="page-break"></div>
+    <div class="header">
+        <h1>BIODATA PELAMAR</h1>
+        <p>Curriculum Vitae of Employee</p>
+    </div>
+
+    <div class="section">
+        <h2>Kursus / Training / Lokakarya yang pernah diikuti</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="30%">Nama Kursus/Training/Lokakarya</th>
+                    <th width="15%">Kota</th>
+                    <th width="10%">Lama (Hari)</th>
+                    <th width="20%">Penyelenggara</th>
+                    <th width="20%">Tahun / Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->certificates ?? [] as $index => $cert)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $cert['name'] }}</td>
+                    <td>{{ $cert['city'] ?? '-' }}</td>
+                    <td>-</td>
+                    <td>{{ $cert['organizer'] ?? '-' }}</td>
+                    <td>{{ $cert['year'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Referensi</h2>
+        <p>(Kepada siapa kami dapat menanyakan diri Anda lebih lengkap)</p>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">Nama</th>
+                    <th width="30%">Alamat</th>
+                    <th width="15%">Telepon</th>
+                    <th width="15%">Pekerjaan</th>
+                    <th width="15%">Hubungan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->references ?? [] as $index => $ref)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $ref['name'] }}</td>
+                    <td>{{ $ref['address'] ?? '-' }}</td>
+                    <td>{{ $ref['phone'] ?? '-' }}</td>
+                    <td>{{ $ref['occupation'] ?? '-' }}</td>
+                    <td>{{ $ref['relationship'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Orang yang dapat dihubungi segera dalam keadaan DARURAT</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">Nama</th>
+                    <th width="30%">Alamat</th>
+                    <th width="15%">Telepon</th>
+                    <th width="15%">Pekerjaan</th>
+                    <th width="15%">Hubungan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->emergency_contacts ?? [] as $index => $contact)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $contact['name'] }}</td>
+                    <td>{{ $contact['address'] ?? '-' }}</td>
+                    <td>{{ $contact['phone'] ?? '-' }}</td>
+                    <td>{{ $contact['occupation'] ?? '-' }}</td>
+                    <td>{{ $contact['relationship'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <div>No. Dokumen : FF/KFI/VII-01.01</div>
+        <div>Edisi/Revisi : 1/0</div>
+        <div>Tanggal : 1-02-2021</div>
+        <div>Halaman : 2 dari 3</div>
+    </div>
+
+    <!-- Halaman 3: Bahasa, Komputer, Kegiatan Sosial, Riwayat Pekerjaan, Pertanyaan -->
+    <div class="page-break"></div>
+    <div class="header">
+        <h1>BIODATA PELAMAR</h1>
+        <p>Curriculum Vitae of Employee</p>
+    </div>
+
+    <div class="section">
+        <h2>Pengetahuan Bahasa (Diisi dengan : Baik Sekali / Baik / Cukup)</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="20%">Macam Bahasa</th>
+                    <th width="15%">Membaca</th>
+                    <th width="15%">Menulis</th>
+                    <th width="15%">Berbicara</th>
+                    <th width="30%">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->language_skills ?? [] as $index => $lang)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $lang['language'] }}</td>
+                    <td>{{ $lang['level'] }}</td>
+                    <td>{{ $lang['level'] }}</td>
+                    <td>{{ $lang['level'] }}</td>
+                    <td>{{ $lang['description'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Pengetahuan Komputer (Diisi dengan : ✓)</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="30%">Jenis Program / Aplikasi</th>
+                    <th width="15%">Mahir</th>
+                    <th width="15%">Menguasai</th>
+                    <th width="15%">Pemula</th>
+                    <th width="20%">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->computer_skills ?? [] as $index => $skill)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $skill['program'] }}</td>
+                    <td>{{ $skill['level'] == 'mahir' ? '✓' : '' }}</td>
+                    <td>{{ $skill['level'] == 'menguasai' ? '✓' : '' }}</td>
+                    <td>{{ $skill['level'] == 'pemula' ? '✓' : '' }}</td>
+                    <td>{{ $skill['description'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Kegiatan Sosial / Keanggotaan Asosiasi</h2>
+        <table class="info-table">
+            <thead>
+                <tr>
+                    <th width="5%">No</th>
+                    <th width="25%">Nama Organisasi</th>
+                    <th width="25%">Alamat</th>
+                    <th width="15%">Jabatan</th>
+                    <th width="15%">Tahun</th>
+                    <th width="15%">Macam Kegiatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($application->social_activities ?? [] as $index => $activity)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $activity['organization'] }}</td>
+                    <td>{{ $activity['address'] ?? '-' }}</td>
+                    <td>{{ $activity['position'] ?? '-' }}</td>
+                    <td>{{ $activity['year'] ?? '-' }}</td>
+                    <td>{{ $activity['activity_type'] ?? '-' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Riwayat Pekerjaan (Dimulai dari pekerjaan Sekarang / Terakhir s/d Sebelumnya)</h2>
+        @foreach($application->employment_histories ?? [] as $index => $job)
+        <div class="form-group">
+            <div class="form-title">Perusahaan {{ $index + 1 }}</div>
+            <table class="info-table">
+                <tr>
+                    <td width="30%">Nama Perusahaan</td>
+                    <td>{{ $job['company_name'] }}</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>{{ $job['address'] ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Telepon</td>
+                    <td>{{ $job['phone'] ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Periode Kerja</td>
+                    <td>{{ $job['start_year'] }} - {{ $job['end_year'] ?? 'Sekarang' }}</td>
+                </tr>
+                <tr>
+                    <td>Jabatan</td>
+                    <td>{{ $job['position'] ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Jenis Usaha</td>
+                    <td>{{ $job['business_type'] ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Gaji Terakhir</td>
+                    <td>{{ $job['last_salary'] ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Alasan Berhenti</td>
+                    <td>{{ $job['reason_for_leaving'] ?? '-' }}</td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="form-title">Uraian Tugas:</div>
+                <div class="form-value">{{ $job['job_description'] ?? '-' }}</div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    <div class="footer">
+        <div>No. Dokumen : FF/KFI/VII-01.01</div>
+        <div>Edisi/Revisi : 1/0</div>
+        <div>Tanggal : 1-02-2021</div>
+        <div>Halaman : 3 dari 3</div>
     </div>
 </body>
 </html>

@@ -31,15 +31,13 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Pendidikan</label>
-                        <input type="text" class="form-control p-2" value="{{ $application->education }}" readonly>
+                        <input type="text" class="form-control p-2" 
+                               value="{{ $application->educations->first()->education_level ?? '-' }}" readonly>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Jurusan</label>
-                        <input type="text" class="form-control p-2" value="{{ $application->major ?? '-' }}" readonly>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Prodi</label>
-                        <input type="text" class="form-control p-2" value="{{ $application->study_program ?? '-' }}" readonly>
+                        <input type="text" class="form-control p-2" 
+                               value="{{ $application->educations->first()->major ?? '-' }}" readonly>
                     </div>
                 </div>
 
@@ -48,7 +46,8 @@
                     <div class="col-md-12">
                         <label for="status" class="form-label fw-bold">Status</label>
                         <select class="form-select p-2" id="status" name="status" required style="font-size: 1rem;">
-                            <option value="submitted" {{ $application->status == 'submitted' ? 'selected' : '' }}>Submitted</option>
+                            <option value="not-reviewed" {{ $application->status == 'not-reviewed' ? 'selected' : '' }}>Not Reviewed</option>
+                            <option value="review-list" {{ $application->status == 'review-list' ? 'selected' : '' }}>Review List</option>
                             <option value="interview" {{ $application->status == 'interview' ? 'selected' : '' }}>Interview</option>
                             <option value="rejected" {{ $application->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                         </select>

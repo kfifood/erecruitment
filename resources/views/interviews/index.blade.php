@@ -106,11 +106,11 @@
                 <!-- Kolom 8: Status Interview -->
                 <td id="interview-status-{{ $interview->id }}">
                     @if($interview->interview_status === 'interviewed')
-                    <span class="badge bg-success">Interviewed</span>
+                    <span class="badge bg-success">Sudah Hadir</span>
                     @else
                     <button class="btn btn-sm btn-primary mark-interviewed-btn" data-interview-id="{{ $interview->id }}"
                         id="mark-btn-{{ $interview->id }}">
-                        <i class="fas fa-check"></i> Tandai Selesai
+                        <i class="fas fa-check"></i> Tandai Hadir
                     </button>
                     @endif
                 </td>

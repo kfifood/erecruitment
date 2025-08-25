@@ -24,7 +24,7 @@ return new class extends Migration
     $table->date('birth_date');
     $table->string('cv');
     $table->string('cover_letter');
-    $table->enum('status', ['submitted', 'interview', 'rejected'])->default('submitted');
+    $table->enum('status', ['not-reviewed','review-list', 'interview', 'rejected'])->default('submitted');
     $table->timestamp('submitted_at')->useCurrent();
     $table->timestamps();
 });

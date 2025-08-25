@@ -12,7 +12,6 @@ class Job extends Model
     protected $table = 'jobs';
     protected $fillable = [
         'position',
-        'description',
         'qualification',
         'division_id',
         'location',
@@ -22,6 +21,9 @@ class Job extends Model
         'posted_date',
         'closing_date',
         'experience',
+        'usia',
+        'gender',
+        'recruitment_type'
     ];
 
     // app/Models/Job.php
@@ -30,6 +32,9 @@ protected $casts = [
     'posted_date' => 'date',
     'closing_date' => 'date',
     'experience' => 'integer',
+    'usia' => 'integer',
+    'gender' => 'array',
+    'recruitment_type' => 'array'
 ];
     
 

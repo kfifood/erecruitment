@@ -12,13 +12,14 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\ApplicationPdfController;
 use App\Http\Controllers\InterviewScoreController;
-use Illuminate\Support\Facades\DB;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show.public');
 Route::get('/jobs/{job}/apply', [ApplicationController::class, 'create'])->name('applications.create.job');
-Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store.public');
+Route::post('/applications', [ApplicationController::class, 'store'])
+    ->name('applications.store.public')
+    ->middleware('web');
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -27,78 +28,105 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Dashboard Route (Protected)
 Route::middleware(['auth'])->group(function () {
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
- Route::get('/users', [UserController::class, 'index'])->name('users.index');
-  Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    
+    // Users
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+    // Divisions
     Route::resource('divisions', DivisionController::class);
+    
+    // Employees
     Route::resource('employees', EmployeeController::class);
+    
+    // Jobs
     Route::resource('jobs', JobController::class)->except(['show']);
-    Route::resource('applications', ApplicationController::class)->except(['create', 'store']);
+    
+    // Applications
+    Route::resource('applications', ApplicationController::class)->except(['show','create', 'store']);
+    
+    // Application Lists
+    Route::prefix('applications')->group(function () {
+        Route::get('/waiting-list-office', [ApplicationController::class, 'waitingListOffice'])
+            ->name('applications.waiting-list-office');
+        Route::get('/waiting-list-production', [ApplicationController::class, 'waitingListProduction'])
+            ->name('applications.waiting-list-production');
+        Route::get('/review-list-office', [ApplicationController::class, 'reviewListOffice'])
+            ->name('applications.review-list-office');
+        Route::get('/review-list-production', [ApplicationController::class, 'reviewListProduction'])
+            ->name('applications.review-list-production');
+    });
 
+    // PDF Related
+    Route::get('/applications/{id}/print', [ApplicationPdfController::class, 'generatePdf'])
+        ->name('applications.print');
+    Route::get('/applications/{id}/preview', [ApplicationPdfController::class, 'previewPdf'])
+        ->name('applications.preview');
+    Route::get('/applications/{id}/download', [ApplicationPdfController::class, 'downloadPdf'])
+        ->name('applications.download');
+    Route::get('/applications/{application}/edit', [ApplicationController::class, 'edit'])
+        ->name('applications.edit');
+
+    // Interviews
     Route::resource('interviews', InterviewController::class)->except(['show']);
-
-
-     // routes/web.php
-Route::post('/interviews/{interview}/send-invitation', [InterviewController::class, 'sendInvitation'])
-     ->name('interviews.send-invitation');
-     
-Route::post('/interviews/{date}/notify-security', [InterviewController::class, 'notifySecurity'])
-     ->name('interviews.notify-security');
-     
-     Route::get('/interview/verify/{code}', [InterviewController::class, 'verifyInterview'])
-    ->name('interview.verify');
+    Route::post('/interviews/{interview}/send-invitation', [InterviewController::class, 'sendInvitation'])
+        ->name('interviews.send-invitation');
+    Route::post('/interviews/{date}/notify-security', [InterviewController::class, 'notifySecurity'])
+        ->name('interviews.notify-security');
+    Route::get('/interview/verify/{code}', [InterviewController::class, 'verifyInterview'])
+        ->name('interview.verify');
     Route::put('/interviews/{interview}/mark-interviewed', [InterviewController::class, 'markAsInterviewed'])
-     ->name('interviews.mark-interviewed');
+        ->name('interviews.mark-interviewed');
 
-     // Di dalam group middleware auth
-Route::get('/applications/{id}/print', [ApplicationPdfController::class, 'generatePdf'])
-    ->name('applications.print');
-Route::get('/applications/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+    // Interview Scores
+    Route::prefix('interview-scores')->group(function () {
+        // Office Routes
+        Route::get('office/unscored', [InterviewScoreController::class, 'officeUnscored'])
+            ->name('interview-scores.office-unscored');
+        Route::get('office/undecided', [InterviewScoreController::class, 'officeUndecided'])
+            ->name('interview-scores.office-undecided');
+        Route::get('office/hired', [InterviewScoreController::class, 'officeHired'])
+            ->name('interview-scores.office-hired');
+        Route::get('office/unhired', [InterviewScoreController::class, 'officeUnhired'])
+            ->name('interview-scores.office-unhired');
+        
+        // Production Routes
+        Route::get('production/unscored', [InterviewScoreController::class, 'productionUnscored'])
+            ->name('interview-scores.production-unscored');
+        Route::get('production/undecided', [InterviewScoreController::class, 'productionUndecided'])
+            ->name('interview-scores.production-undecided');
+        Route::get('production/hired', [InterviewScoreController::class, 'productionHired'])
+            ->name('interview-scores.production-hired');
+        Route::get('production/unhired', [InterviewScoreController::class, 'productionUnhired'])
+            ->name('interview-scores.production-unhired');
+        
+        // Common Routes
+        Route::post('store-production', [InterviewScoreController::class, 'storeProduction'])
+            ->name('interview-scores.store-production');
+        Route::get('create/{interview}', [InterviewScoreController::class, 'create'])
+            ->name('interview-scores.create');
+        Route::post('{interview}', [InterviewScoreController::class, 'store'])
+            ->name('interview-scores.store');
+        Route::put('{score}/decision', [InterviewScoreController::class, 'updateDecision'])
+            ->name('interview-scores.update-decision');
+        Route::post('{score}/send-result', [InterviewScoreController::class, 'sendInterviewResult'])
+            ->name('interview-scores.send-result');
+        Route::delete('{interviewScore}', [InterviewScoreController::class, 'destroy'])
+            ->name('interview-scores.destroy');
+        Route::get('{interviewScore}', [InterviewScoreController::class, 'show'])
+            ->name('interview-scores.show');
+        Route::get('unhired-detail/{id}', [InterviewScoreController::class, 'unhiredDetail'])
+            ->name('interview-scores.unhired-detail');
+    });
 
-    // Di dalam group middleware auth
-Route::get('/applications/{id}/preview', [ApplicationPdfController::class, 'previewPdf'])
-    ->name('applications.preview');
-    
-Route::get('/applications/{id}/download', [ApplicationPdfController::class, 'downloadPdf'])
-    ->name('applications.download');
-
-Route::resource('interview-scores', InterviewScoreController::class);
- //CREATE
-Route::get('/interview-scores/create/{interview}', [InterviewScoreController::class, 'create'])
-     ->name('interview-scores.create');
-
-// STORE (perbaiki parameter menjadi {interview})
-Route::post('/interview-scores/{interview}', [InterviewScoreController::class, 'store'])
-     ->name('interview-scores.store');
-
-// UPDATE DECISION
-Route::put('/interview-scores/{score}/decision', [InterviewScoreController::class, 'updateDecision'])
-     ->name('interview-scores.update-decision');
-     
-
-      Route::get('/unscored', [InterviewScoreController::class, 'unscored'])->name('interview-scores.unscored');
-    Route::get('/hired', [InterviewScoreController::class, 'hired'])->name('interview-scores.hired');
-    Route::get('/unhired', [InterviewScoreController::class, 'unhired'])->name('interview-scores.unhired');
-    Route::get('/undecided', [InterviewScoreController::class, 'undecided'])->name('interview-scores.undecided');
-// SEND RESULT
-Route::post('/interview-scores/{score}/send-result', [InterviewScoreController::class, 'sendInterviewResult'])
-     ->name('interview-scores.send-result');
-
-     Route::delete('/interview-scores/{interviewScore}', [InterviewScoreController::class, 'destroy'])
-    ->name('interview-scores.destroy');
-Route::get('/interview-scores/{interviewScore}', [InterviewScoreController::class, 'show'])
-    ->name('interview-scores.show');
-    
-    // routes/web.php
-Route::get('/interview-scores/unhired-detail/{id}', [InterviewScoreController::class, 'unhiredDetail'])
-     ->name('interview-scores.unhired-detail');
-    // routes/web.php (temporary testing route)
-Route::get('/test-wablas', function() {
-    $wablas = new App\Services\WablasService();
-    return $wablas->sendMessage('6282139385685', 'Pesan test dari Wablas');
-});
+    // Testing Route (can be removed in production)
+    Route::get('/test-wablas', function() {
+        $wablas = new App\Services\WablasService();
+        return $wablas->sendMessage('6282139385685', 'Pesan test dari Wablas');
+    });
 });
