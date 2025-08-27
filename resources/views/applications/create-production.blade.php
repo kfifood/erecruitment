@@ -11,6 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Di bagian head setelah CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
     :root {
@@ -39,62 +41,62 @@
         max-width: 1000px;
     }
 
-.application-header {
-    
-    padding-bottom: 15px;
-    margin-bottom: 30px;
-}
+    .application-header {
 
-.header-logo img.company-logo {
-    height: 60px;
-    max-width: 100%;
-    object-fit: contain;
-}
-
-.vertical-divider {
-    border-left: 2px solid #ddd;
-    height: 100px;
-}
-
-.header-text {
-    flex: 1;
-}
-
-.header-title {
-    color: #30318B;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.position-applied {
-    font-size: 1rem;
-    color: #333;
-}
-
-.header-divider {
-    border-top: 2px solid #ddd;
-    
-}
-
-@media (max-width: 768px) {
-    .header-title {
-        font-size: 1.4rem;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
     }
-    
-    .position-applied {
-        font-size: 1rem;
-    }
-    
+
     .header-logo img.company-logo {
         height: 60px;
+        max-width: 100%;
+        object-fit: contain;
     }
-    
+
     .vertical-divider {
-        height: 60px;
+        border-left: 2px solid #ddd;
+        height: 100px;
     }
-}
+
+    .header-text {
+        flex: 1;
+    }
+
+    .header-title {
+        color: #30318B;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+    .position-applied {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .header-divider {
+        border-top: 2px solid #ddd;
+
+    }
+
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 1.4rem;
+        }
+
+        .position-applied {
+            font-size: 1rem;
+        }
+
+        .header-logo img.company-logo {
+            height: 60px;
+        }
+
+        .vertical-divider {
+            height: 60px;
+        }
+    }
 
     .required-field::after {
         content: " *";
@@ -295,15 +297,18 @@
     .form-check-inline {
         display: inline-flex;
         align-items: center;
-        margin-right: 0; /* Reset margin default */
+        margin-right: 0;
+        /* Reset margin default */
     }
 
     .gap-4 {
-        gap: 1.5rem; /* Spasi antara Ya dan Tidak */
+        gap: 1.5rem;
+        /* Spasi antara Ya dan Tidak */
     }
 
     .form-check-input {
-        margin-right: 0.5rem; /* Spasi antara radio button dan label */
+        margin-right: 0.5rem;
+        /* Spasi antara radio button dan label */
     }
 
     /* Tambahkan ke stylesheet Anda */
@@ -323,10 +328,11 @@
             padding-bottom: 10px;
         }
     }
+
     .question-group {
-        
+
         border-radius: 8px;
-        
+
         margin-bottom: 20px;
     }
 
@@ -392,6 +398,7 @@
         }
     }
     </style>
+    
 </head>
 
 <body>
@@ -478,9 +485,35 @@
                                     <label for="birth_date" class="form-label required-field">Tanggal Lahir</label>
                                     <input type="date" class="form-control" id="birth_date" name="birth_date" required>
                                 </div>
+                                <input type="hidden" id="job_gender" value="{{ $job->gender }}">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label required-field">Jenis Kelamin</label>
                                     <div>
+                                        @if($job->gender == 'pria')
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="gender_male"
+                                                value="L" checked required>
+                                            <label class="form-check-label" for="gender_male">Laki-laki</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender"
+                                                id="gender_female" value="P" disabled>
+                                            <label class="form-check-label" for="gender_female"
+                                                style="color: #ccc;">Perempuan</label>
+                                        </div>
+                                        @elseif($job->gender == 'wanita')
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender" id="gender_male"
+                                                value="L" disabled>
+                                            <label class="form-check-label" for="gender_male"
+                                                style="color: #ccc;">Laki-laki</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="gender"
+                                                id="gender_female" value="P" checked required>
+                                            <label class="form-check-label" for="gender_female">Perempuan</label>
+                                        </div>
+                                        @else
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="gender" id="gender_male"
                                                 value="L" required>
@@ -491,7 +524,14 @@
                                                 id="gender_female" value="P">
                                             <label class="form-check-label" for="gender_female">Perempuan</label>
                                         </div>
+                                        @endif
                                     </div>
+                                    <small class="text-muted">Lowongan ini untuk:
+                                        @if($job->gender == 'pria') Pria
+                                        @elseif($job->gender == 'wanita') Wanita
+                                        @else Pria/Wanita
+                                        @endif
+                                    </small>
                                 </div>
                             </div>
 
@@ -517,9 +557,42 @@
                                 <label for="address" class="form-label required-field">Alamat Lengkap</label>
 
                                 <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <label for="province"
+                                            class="form-label required-field"><small>Provinsi</small></label>
+                                        <select class="form-select" id="province" name="province" required>
+                                            <option value="">Pilih Provinsi</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="city"
+                                            class="form-label required-field"><small>Kabupaten/Kota</small></label>
+                                        <select class="form-select" id="city" name="city" required>
+                                            <option value="">Pilih Kabupaten/Kota</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    
+                                    <div class="col-md-6">
+                                        <label for="district"
+                                            class="form-label required-field"><small>Kecamatan</small></label>
+                                        <select class="form-select" id="district" name="district" required>
+                                            <option value="">Pilih Kecamatan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="village"
+                                            class="form-label required-field"><small>Desa/Kelurahan</small></label>
+                                        <select class="form-select" id="village" name="village" required>
+                                            <option value="">Pilih Desa/Kelurahan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
                                     <div class="col-md-12">
                                         <label for="street" class="form-label required-field"><small>Jalan/Alamat
-                                            Spesifik</small></label>
+                                                Spesifik</small></label>
                                         <input type="text" class="form-control" id="street" name="street" required>
                                     </div>
                                 </div>
@@ -534,29 +607,6 @@
                                         <input type="text" class="form-control" id="rw" name="rw" maxlength="3">
                                     </div>
                                 </div>
-
-                                <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <label for="village" class="form-label required-field"><small>Desa/Kelurahan</small></label>
-                                        <input type="text" class="form-control" id="village" name="village" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="district" class="form-label required-field"><small>Kecamatan</small></label>
-                                        <input type="text" class="form-control" id="district" name="district" required>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <label for="city" class="form-label required-field"><small>Kabupaten/Kota</small></label>
-                                        <input type="text" class="form-control" id="city" name="city" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="province" class="form-label required-field"><small>Provinsi</small></label>
-                                        <input type="text" class="form-control" id="province" name="province" required>
-                                    </div>
-                                </div>
-
                                 <!-- Input hidden untuk menyimpan alamat lengkap -->
                                 <input type="hidden" id="address" name="address">
                             </div>
@@ -656,7 +706,8 @@
                             <h4 class="step-header">2. Data Pendidikan</h4>
 
                             <!-- Riwayat Pendidikan -->
-                            <h5 class="section-title">Riwayat Pendidikan <small class="text-muted">(Pendidikan Terakhir Anda)</small></h5>
+                            <h5 class="section-title">Riwayat Pendidikan <small class="text-muted">(Pendidikan Terakhir
+                                    Anda)</small></h5>
                             <div id="educationsContainer">
                                 <div class="education-form">
                                     <div class="row">
@@ -911,7 +962,115 @@
     <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Script untuk dropdown alamat -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    // Fungsi untuk memuat data wilayah
+    function loadRegions(type, parentId = null) {
+        let url = '';
 
+        switch (type) {
+            case 'province':
+                url = '/api/provinces';
+                break;
+            case 'regency':
+                url = `/api/regencies/${parentId}`;
+                break;
+            case 'district':
+                url = `/api/districts/${parentId}`;
+                break;
+            case 'village':
+                url = `/api/villages/${parentId}`;
+                break;
+        }
+
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            });
+    }
+
+    // Inisialisasi dropdown alamat
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load provinsi
+        loadRegions('province').then(provinces => {
+            const provinceSelect = document.getElementById('province');
+            provinceSelect.innerHTML = '<option value="">Pilih Provinsi</option>';
+
+            provinces.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.id;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+        });
+
+        // Event listener untuk perubahan provinsi
+        document.getElementById('province').addEventListener('change', function() {
+            const provinceId = this.value;
+            if (provinceId) {
+                loadRegions('regency', provinceId).then(regencies => {
+                    const regencySelect = document.getElementById('city');
+                    regencySelect.innerHTML = '<option value="">Pilih Kabupaten/Kota</option>';
+
+                    regencies.forEach(regency => {
+                        const option = document.createElement('option');
+                        option.value = regency.id;
+                        option.textContent = regency.name;
+                        regencySelect.appendChild(option);
+                    });
+
+                    // Reset dropdown kecamatan dan desa
+                    document.getElementById('district').innerHTML =
+                        '<option value="">Pilih Kecamatan</option>';
+                    document.getElementById('village').innerHTML =
+                        '<option value="">Pilih Desa/Kelurahan</option>';
+                });
+            }
+        });
+
+        // Event listener untuk perubahan kabupaten
+        document.getElementById('city').addEventListener('change', function() {
+            const regencyId = this.value;
+            if (regencyId) {
+                loadRegions('district', regencyId).then(districts => {
+                    const districtSelect = document.getElementById('district');
+                    districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+
+                    districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.id;
+                        option.textContent = district.name;
+                        districtSelect.appendChild(option);
+                    });
+
+                    // Reset dropdown desa
+                    document.getElementById('village').innerHTML =
+                        '<option value="">Pilih Desa/Kelurahan</option>';
+                });
+            }
+        });
+
+        // Event listener untuk perubahan kecamatan
+        document.getElementById('district').addEventListener('change', function() {
+            const districtId = this.value;
+            if (districtId) {
+                loadRegions('village', districtId).then(villages => {
+                    const villageSelect = document.getElementById('village');
+                    villageSelect.innerHTML = '<option value="">Pilih Desa/Kelurahan</option>';
+
+                    villages.forEach(village => {
+                        const option = document.createElement('option');
+                        option.value = village.id;
+                        option.textContent = village.name;
+                        villageSelect.appendChild(option);
+                    });
+                });
+            }
+        });
+    });
+    </script>
     <script>
     // Variabel global untuk counter
     let familyMemberCount = 0;
@@ -936,13 +1095,52 @@
         }
     }
 
-    // Fungsi navigasi step form
+    // Fungsi untuk menampilkan alert konfirmasi gender
+    function showGenderConfirmationAlert() {
+        const jobGender = document.getElementById('job_gender').value;
+        let genderMessage = '';
+
+        if (jobGender === 'pria') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria untuk menyesuaikan kebutuhan kami';
+        } else if (jobGender === 'wanita') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Wanita untuk menyesuaikan kebutuhan kami';
+        } else {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria/Wanita untuk menyesuaikan kebutuhan kami';
+        }
+
+        return Swal.fire({
+            title: 'Konfirmasi Jenis Kelamin',
+            text: genderMessage,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary-color)',
+            cancelButtonColor: 'var(--secondary-color)',
+            confirmButtonText: 'Ya, Sudah Benar',
+            cancelButtonText: 'Periksa Kembali'
+        });
+    }
+
+    // Modifikasi fungsi nextStep untuk menambahkan validasi gender
     function nextStep(current, next) {
         // Validasi step saat ini sebelum lanjut
         if (!validateStep(current)) {
             return;
         }
 
+        // Tampilkan konfirmasi gender sebelum melanjutkan ke step 2
+        if (current === 1 && next === 2) {
+            showGenderConfirmationAlert().then((result) => {
+                if (result.isConfirmed) {
+                    proceedToNextStep(current, next);
+                }
+            });
+        } else {
+            proceedToNextStep(current, next);
+        }
+    }
+
+    // Fungsi untuk melanjutkan ke step berikutnya
+    function proceedToNextStep(current, next) {
         document.getElementById(`step${current}`).classList.remove('active');
         document.getElementById(`step${next}`).classList.add('active');
 
@@ -989,31 +1187,48 @@
     }
 
     // Fungsi untuk menggabungkan alamat
-    function buildFullAddress() {
-        const street = document.getElementById('street').value;
-        const rt = document.getElementById('rt').value;
-        const rw = document.getElementById('rw').value;
-        const village = document.getElementById('village').value;
-        const district = document.getElementById('district').value;
-        const city = document.getElementById('city').value;
-        const province = document.getElementById('province').value;
+function buildFullAddress() {
+    const street = document.getElementById('street').value;
+    const rt = document.getElementById('rt').value;
+    const rw = document.getElementById('rw').value;
+    
+    // Dapatkan teks yang dipilih dari dropdown
+    const villageSelect = document.getElementById('village');
+    const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
+    
+    const districtSelect = document.getElementById('district');
+    const district = districtSelect.options[districtSelect.selectedIndex]?.text || '';
+    
+    const citySelect = document.getElementById('city');
+    const city = citySelect.options[citySelect.selectedIndex]?.text || '';
+    
+    const provinceSelect = document.getElementById('province');
+    const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
 
-        let addressParts = [];
+    let addressParts = [];
 
-        if (street) addressParts.push(street);
-        if (rt || rw) {
-            addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
-        }
-        if (village) addressParts.push(`Desa/Kel. ${village}`);
-        if (district) addressParts.push(`Kec. ${district}`);
-        if (city) addressParts.push(`Kab./Kota ${city}`);
-        if (province) addressParts.push(`Prov. ${province}`);
-
-        const fullAddress = addressParts.join(', ');
-        document.getElementById('address').value = fullAddress;
-
-        return fullAddress;
+    if (street) addressParts.push(street);
+    if (rt || rw) {
+        addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
     }
+    if (village) addressParts.push(`Desa/Kel. ${village}`);
+    if (district) addressParts.push(`Kec. ${district}`);
+    if (city) addressParts.push(`Kab./Kota ${city}`);
+    if (province) addressParts.push(`Prov. ${province}`);
+
+    const fullAddress = addressParts.join(', ');
+    document.getElementById('address').value = fullAddress;
+
+    return fullAddress;
+}
+// Tambahkan event listener untuk dropdown alamat
+const addressDropdowns = ['province', 'city', 'district', 'village'];
+addressDropdowns.forEach(dropdown => {
+    const element = document.getElementById(dropdown);
+    if (element) {
+        element.addEventListener('change', buildFullAddress);
+    }
+});
 
     // Fungsi validasi step
     function validateStep(step) {
@@ -1156,25 +1371,35 @@
         return isValid;
     }
 
+    // GANTI fungsi toggleFamilyForm dengan yang baru
     function toggleFamilyForm(status) {
         const container = document.getElementById('familyFormContainer');
-        container.style.display = 'block';
+        const maritalStatus = document.getElementById('marital_status').value;
 
-        document.getElementById('familyMembersContainer').innerHTML = '';
-        familyMemberCount = 0;
+        if (maritalStatus === 'belum menikah' || maritalStatus === 'menikah' || maritalStatus === 'duda/janda') {
+            container.style.display = 'block';
+            document.getElementById('familyMembersContainer').innerHTML = '';
+            familyMemberCount = 0;
 
-        // Auto-generate fields sesuai status
-        addFamilyMember('ayah');
-        addFamilyMember('ibu');
-
-        if (status === 'menikah') {
-            addFamilyMember('suami/istri');
-        } else if (status === 'duda/janda') {
-            addFamilyMember('duda/janda');
+            // Auto-generate fields sesuai status
+            if (maritalStatus === 'belum menikah') {
+                addFamilyMember('ayah', true); // Ayah - tidak bisa dihapus
+                addFamilyMember('ibu', true); // Ibu - tidak bisa dihapus
+            } else if (maritalStatus === 'menikah') {
+                addFamilyMember('suami/istri', true); // Pasangan - tidak bisa dihapus
+                addFamilyMember('ayah', true); // Ayah - tidak bisa dihapus
+                addFamilyMember('ibu', true); // Ibu - tidak bisa dihapus
+            } else if (maritalStatus === 'duda/janda') {
+                addFamilyMember('duda/janda', true); // Duda/Janda - tidak bisa dihapus
+                addFamilyMember('ayah', true); // Ayah - tidak bisa dihapus
+                addFamilyMember('ibu', true); // Ibu - tidak bisa dihapus
+            }
+        } else {
+            container.style.display = 'none';
         }
     }
-
-    function addFamilyMember(role = null) {
+    // GANTI fungsi addFamilyMember dengan yang baru
+    function addFamilyMember(role = null, isFixed = false) {
         const container = document.getElementById('familyMembersContainer');
         const memberId = familyMemberCount++;
 
@@ -1182,6 +1407,7 @@
             'ayah': 'Ayah',
             'ibu': 'Ibu',
             'suami/istri': 'Suami/Istri',
+            'duda/janda': 'Duda/Janda',
             'anak': 'Anak',
             'saudara': 'Saudara',
         };
@@ -1189,56 +1415,78 @@
         // Gunakan parameter role sebagai selectedRole jika ada
         const selectedRole = role || '';
 
+        // Tentukan apakah tombol hapus harus ditampilkan
+        const showRemoveButton = !isFixed;
+
         const html = `
-        <div class="family-member-form" id="familyMember_${memberId}">
-            <div class="row">
-                <div class="col-md-3 mb-2">
-                    <label class="form-label">Hubungan</label>
-                    <select class="form-select" name="family_members_data[${memberId}][family_role]">
-                        ${Object.entries(roles).map(([value, text]) => 
-                            `<option value="${value}" ${selectedRole === value ? 'selected' : ''}>${text}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="col-md-3 mb-2">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" name="family_members_data[${memberId}][name]" required>
-                </div>
-                <div class="col-md-2 mb-2">
-                    <label class="form-label">Jenis Kelamin</label>
-                    <select class="form-select" name="family_members_data[${memberId}][gender]" required>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </div>
-                <div class="col-md-2 mb-2">
-                    <label class="form-label">Tanggal Lahir</label>
-                    <input type="date" class="form-control" name="family_members_data[${memberId}][birth_date]" required>
-                </div>
-                <div class="col-md-2 mb-2 d-flex align-items-end">
-                    <button type="button" class="btn btn-sm remove-btn w-100" onclick="removeFamilyMember(${memberId})">
-                        <i class="fas fa-trash"></i> Hapus
-                    </button>
-                </div>
+    <div class="family-member-form" id="familyMember_${memberId}">
+        <div class="row">
+            <div class="col-md-3 mb-2">
+                <label class="form-label">Hubungan</label>
+                <select class="form-select" name="family_members_data[${memberId}][family_role]" ${isFixed ? 'readonly' : ''}>
+                    ${Object.entries(roles).map(([value, text]) => 
+                        `<option value="${value}" ${selectedRole === value ? 'selected' : ''}>${text}</option>`).join('')}
+                </select>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Pekerjaan Terakhir</label>
-                    <input type="text" class="form-control" name="family_members_data[${memberId}][last_position]">
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Perusahaan Terakhir</label>
-                    <input type="text" class="form-control" name="family_members_data[${memberId}][last_company]">
-                </div>
+            <div class="col-md-3 mb-2">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" name="family_members_data[${memberId}][name]" required>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">Jenis Kelamin</label>
+                <select class="form-select" name="family_members_data[${memberId}][gender]" required>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-2">
+                <label class="form-label">Tanggal Lahir</label>
+                <input type="date" class="form-control" name="family_members_data[${memberId}][birth_date]" required>
+            </div>
+            <div class="col-md-2 mb-2 d-flex align-items-end">
+                ${showRemoveButton ? 
+                    `<button type="button" class="btn btn-sm remove-btn w-100" onclick="removeFamilyMember(${memberId})">
+                        <i class="fas fa-trash"></i> Hapus
+                    </button>` : 
+                    `<button type="button" class="btn btn-sm btn-secondary w-100" disabled>
+                        <i class="fas fa-lock"></i> Tetap
+                    </button>`
+                }
             </div>
         </div>
-        `;
+        <div class="row">
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Pekerjaan Terakhir</label>
+                <input type="text" class="form-control" name="family_members_data[${memberId}][last_position]">
+            </div>
+            <div class="col-md-6 mb-2">
+                <label class="form-label">Perusahaan Terakhir</label>
+                <input type="text" class="form-control" name="family_members_data[${memberId}][last_company]">
+            </div>
+        </div>
+    </div>
+    `;
 
         container.insertAdjacentHTML('beforeend', html);
-    }
 
+        // Untuk field yang fixed, set nilai default untuk jenis kelamin berdasarkan peran
+        if (isFixed) {
+            const genderSelect = document.querySelector(
+                `#familyMember_${memberId} select[name="family_members_data[${memberId}][gender]"]`);
+            if (selectedRole === 'ayah' || selectedRole === 'suami/istri' || selectedRole === 'duda/janda') {
+                genderSelect.value = 'L';
+            } else if (selectedRole === 'ibu') {
+                genderSelect.value = 'P';
+            }
+        }
+    }
+    // TAMBAHKAN fungsi ini untuk memastikan field tetap tidak bisa dihapus
     function removeFamilyMember(id) {
         const element = document.getElementById(`familyMember_${id}`);
-        if (element) {
+        const removeButton = element.querySelector('.remove-btn');
+
+        // Hanya hapus jika tombol remove ada (bukan field tetap)
+        if (removeButton && !removeButton.disabled) {
             element.remove();
             familyMemberCount--;
         }
@@ -1404,6 +1652,10 @@
         document.getElementById(`emergencyContact_${id}`).remove();
     }
 
+
+
+
+
     // Validasi sebelum submit
     document.getElementById('applicationForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -1481,6 +1733,7 @@
         // Inisialisasi status perkawinan saat pertama kali load
         const maritalStatus = document.getElementById('marital_status');
         if (maritalStatus) {
+            // Panggil toggleFamilyForm dengan nilai awal
             toggleFamilyForm(maritalStatus.value);
 
             // Tambahkan event listener untuk perubahan
@@ -1488,6 +1741,9 @@
                 toggleFamilyForm(this.value);
             });
         }
+
+        // Juga panggil saat form pertama kali dimuat
+        toggleFamilyForm(maritalStatus.value);
 
         // Tambahkan event listener untuk field alamat
         const addressFields = ['street', 'rt', 'rw', 'village', 'district', 'city', 'province'];

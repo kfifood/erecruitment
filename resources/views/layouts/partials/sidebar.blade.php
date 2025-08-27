@@ -16,12 +16,15 @@
                     </a>
                 </li>
                 <!-- Menu Users -->
+                @if (Auth::user()->role !== 'Employee')
                 <li class="sidebar-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
                     <a href="{{ route('users.index') }}" class="sidebar-link">
                         <i class="fas fa-users me-2"></i>
                         <span>Users</span>
                     </a>
                 </li>
+                @endif
+
 
                 <!-- Menu Employee -->
                 <li class="sidebar-item {{ request()->routeIs('divisions.*') ? 'active' : '' }}">
@@ -76,64 +79,75 @@
                     </ul>
                 </li>
                 <!-- Interviews Dropdown -->
-            <li class="sidebar-item has-submenu {{ request()->routeIs('interviews.*') ? 'active' : '' }}">
-                <a href="#" class="sidebar-link">
-                    <i class="fas fa-comments me-2"></i>
-                    <span>Interviews</span>
-                    <i class="fas fa-chevron-right dropdown-icon"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="submenu-item {{ request()->routeIs('interviews.index') ? 'active' : '' }}">
-                        <a href="{{ route('interviews.index') }}">Interview Schedule</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.office-unscored') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.office-unscored') }}">Interview Scoring Office</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.production-unscored') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.production-unscored') }}">Interview Scoring Production</a>
-                    </li>
-                </ul>
-            </li>
+                <li class="sidebar-item has-submenu {{ request()->routeIs('interviews.*') ? 'active' : '' }}">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-comments me-2"></i>
+                        <span>Interviews</span>
+                        <i class="fas fa-chevron-right dropdown-icon"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item {{ request()->routeIs('interviews.index') ? 'active' : '' }}">
+                            <a href="{{ route('interviews.index') }}">Interview Schedule</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.office-unscored') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.office-unscored') }}">Interview Scoring Office</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.production-unscored') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.production-unscored') }}">Interview Scoring
+                                Production</a>
+                        </li>
+                    </ul>
+                </li>
 
-            <!-- Scoring Office Dropdown -->
-            <li class="sidebar-item has-submenu {{ request()->routeIs('interview-scores.office-*') ? 'active' : '' }}">
-                <a href="#" class="sidebar-link">
-                    <i class="fas fa-star-half-alt me-2"></i>
-                    <span>Scoring Office</span>
-                    <i class="fas fa-chevron-right dropdown-icon"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.office-undecided') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.office-undecided') }}">Waiting Decision</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.office-hired') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.office-hired') }}">Hired Candidate</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.office-unhired') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.office-unhired') }}">Unhired Candidate</a>
-                    </li>
-                </ul>
-            </li>
+                <!-- Scoring Office Dropdown -->
+                <li
+                    class="sidebar-item has-submenu {{ request()->routeIs('interview-scores.office-*') ? 'active' : '' }}">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-star-half-alt me-2"></i>
+                        <span>Scoring Office</span>
+                        <i class="fas fa-chevron-right dropdown-icon"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.office-undecided') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.office-undecided') }}">Waiting Decision</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.office-hired') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.office-hired') }}">Hired Candidate</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.office-unhired') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.office-unhired') }}">Unhired Candidate</a>
+                        </li>
+                    </ul>
+                </li>
 
-            <!-- Scoring Production Dropdown -->
-            <li class="sidebar-item has-submenu {{ request()->routeIs('interview-scores.production-*') ? 'active' : '' }}">
-                <a href="#" class="sidebar-link">
-                    <i class="fas fa-star-half-alt me-2"></i>
-                    <span>Scoring Production</span>
-                    <i class="fas fa-chevron-right dropdown-icon"></i>
-                </a>
-                <ul class="submenu">
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.production-undecided') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.production-undecided') }}">Waiting Decision</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.production-hired') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.production-hired') }}">Hired Candidate</a>
-                    </li>
-                    <li class="submenu-item {{ request()->routeIs('interview-scores.production-unhired') ? 'active' : '' }}">
-                        <a href="{{ route('interview-scores.production-unhired') }}">Unhired Candidate</a>
-                    </li>
-                </ul>
-            </li>
+                <!-- Scoring Production Dropdown -->
+                <li
+                    class="sidebar-item has-submenu {{ request()->routeIs('interview-scores.production-*') ? 'active' : '' }}">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-star-half-alt me-2"></i>
+                        <span>Scoring Production</span>
+                        <i class="fas fa-chevron-right dropdown-icon"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.production-undecided') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.production-undecided') }}">Waiting Decision</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.production-hired') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.production-hired') }}">Hired Candidate</a>
+                        </li>
+                        <li
+                            class="submenu-item {{ request()->routeIs('interview-scores.production-unhired') ? 'active' : '' }}">
+                            <a href="{{ route('interview-scores.production-unhired') }}">Unhired Candidate</a>
+                        </li>
+                    </ul>
+                </li>
 
             </ul>
         </div>

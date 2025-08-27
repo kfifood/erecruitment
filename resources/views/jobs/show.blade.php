@@ -236,7 +236,7 @@
 
         <div class="job-content">
             <!-- Persyaratan -->
-            <h3 class="section-title">Persyaratan</h3>
+            <h3 class="section-title">Kualifikasi</h3>
             <div class="requirements">
                 @php
                 $qualification = preg_replace('/\n\s*\n/', "\n", strip_tags($job->qualification));

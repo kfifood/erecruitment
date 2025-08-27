@@ -12,6 +12,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\ApplicationPdfController;
 use App\Http\Controllers\InterviewScoreController;
+use App\Http\Controllers\RegionController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,6 +27,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::prefix('api')->group(function () {
+    Route::get('/provinces', [RegionController::class, 'getProvinces']);
+    Route::get('/regencies/{provinceId}', [RegionController::class, 'getRegencies']);
+    Route::get('/districts/{regencyId}', [RegionController::class, 'getDistricts']);
+    Route::get('/villages/{districtId}', [RegionController::class, 'getVillages']);
+});
 // Dashboard Route (Protected)
 Route::middleware(['auth'])->group(function () {
     // Dashboard

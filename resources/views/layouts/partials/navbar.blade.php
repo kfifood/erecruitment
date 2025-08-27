@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container-fluid d-flex align-items-center px-4">
+<nav class="navbar navbar-expand-md navbar-light shadow-sm">
+    <div class="container-fluid d-flex" style="width:1400px;">
         <!-- Logo dan Brand -->
         <div class="d-flex align-items-center">
-            <img src="{{ asset('logo.png') }}" alt="Kirana Logo" class="logo-img" style="height: 27px;" />
+            <img src="{{ asset('logo.png') }}" alt="Kirana Logo" class="logo-img" style="height: 40px;" />
             <a class="navbar-brand ms-2" href="{{ url('/') }}">
-                K-JOBS
+                K-CRAB
             </a>
         </div>
 

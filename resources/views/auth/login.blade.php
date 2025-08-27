@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login - K-JOBS</title>
+    <title>Login K-SCRAB</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -81,7 +81,7 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="card border-0 shadow-lg">
                         <div class="card-header py-4" style="background: var(--gradient-primary);">
-                            <h3 class="text-center text-white fw-bold fs-4 mb-0">{{ __('Login to K-JOBS') }}</h3>
+                            <h3 class="text-center text-white fw-bold fs-4 mb-0">{{ __('Login to K-CRAB') }}</h3>
                         </div>
 
                         <div class="card-body p-5">

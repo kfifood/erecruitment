@@ -187,7 +187,7 @@
         <div class="job-content">
             
 
-            <h3 class="section-title">Persyaratan</h3>
+            <h3 class="section-title">Kualifikasi</h3>
             <ul class="requirement-list">
                 @foreach(explode("\n", $job->qualification) as $requirement)
                     @if(trim($requirement))

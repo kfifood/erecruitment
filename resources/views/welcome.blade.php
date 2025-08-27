@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>K-JOBS</title>
+    <title>K-CRAB</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,45 +28,43 @@
 <body>
     @include('layouts.partials.navbar')
     <!-- Welcome Section -->
-    <section class="welcome-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 order-lg-1 order-2">
-                    <h2 class="welcome_title animate__animated animate__fadeInUp">
-                        Selamat Datang di <span class="highlight-text">K-JOBS</span><br>
-                        <small class="fs-4" style="color: var(--bluedark-color);">PT Kirana Food International Job Opportunity & Bridging</small>
-                    </h2>
-                    <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s" style="color: var(--text-secondary);">
-                        Temukan karir impian Anda dan bergabunglah dengan tim profesional kami yang dinamis dan inovatif.
-                    </p>
-                    <div class="animate__animated animate__fadeInUp animate__delay-2s">
-                        <a href="#open-positions" class="btn-rekrutmen me-3">
-                            Lihat Posisi Terbuka <i class="fas fa-arrow-down ms-2"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6 order-lg-2 order-1 mb-4 mb-lg-0 text-center animate__animated animate__fadeIn">
-                    <img src="{{ asset('career.png') }}" alt="Career Illustration" class="hero-illustration animate__animated animate__fadeInUp animate__delay-0.5s" 
-                    style="max-height: 400px;">
+<section class="welcome-section">
+    <div class="container h-100" style="max-width: 1400px;">
+        <div class="row align-items-center h-100">
+            <div class="col-lg-4 col-md-6">
+                <h2 class="welcome_title animate__animated animate__fadeInUp">
+                    Selamat Datang di <span class="highlight-text">K-CRAB</span><br><br>
+                    <p style="color: #4e4e4e; font-size: 1.5rem;">
+                        Kirana Cyber Recruitment
+</p>
+                    <p style="color: #4e4e4e; font-size: 1.5rem;">
+                        Automated Benchmark</>
+                </h2>
+                <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s" style="color: #4e4e4e;">
+                    Bergabunglah bersama kami dan kembangkan karier Anda di lingkungan kerja yang inovatif, kolaboratif, dan dinamis.
+                </p>
+                <div class="animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="#open-positions" class="btn-rekrutmen me-3">
+                        Lihat Posisi yang Dibuka <i class="fas fa-arrow-down ms-2"></i>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Open Positions Section -->
 <section id="open-positions" class="open-section py-5">
     <div class="container">
         <h2 class="section-title animate__animated animate__fadeIn">Posisi Terbuka</h2>
-        <p class="text-center mb-5 fs-5 animate__animated animate__fadeIn animate__delay-1s" style="color: var(--text-secondary);">
-            Bergabunglah dengan tim kami dan menjadi bagian dari sesuatu yang istimewa.
-        </p>
         
         <div class="row g-4">
             @foreach($jobs as $job)
             <div class="col-xl-3 col-lg-4 col-md-6 mb-4 animate__animated animate__fadeInUp" style="animation-delay: {{ $loop->index * 0.1 }}s">
                 <div class="job-card h-100 p-3">
                     <div class="d-flex align-items-start mb-3">
-                        <i class="fas fa-briefcase me-3 mt-1" style="color: var(--primary-color); font-size: 1.1rem;"></i>
+                        <i class="fas fa-briefcase me-3 mt-1" style="color: #30318B; font-size: 1.1rem;"></i>
                         <div>
                             <h5 class="mb-2 fw-bold text-primary">{{ $job->position }}</h5>
                             <div class="d-flex align-items-center mb-2">
@@ -83,7 +81,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('jobs.show.public', $job->id) }}" target="_blank" class="btn btn-outline-primary w-100 py-2" style="font-size: 0.9rem;">
+                    <a href="{{ route('jobs.show.public', $job->id) }}" target="_blank" class="btn btn-lamar-outline w-100 py-2" style="font-size: 0.9rem;">
                         Lihat dan Lamar<i class="fas fa-chevron-right ms-2"></i>
                     </a>
                 </div>
@@ -94,7 +92,7 @@
         @if($jobs->isEmpty())
             <div class="text-center py-4 animate__animated animate__fadeIn">
                 <div class="py-5">
-                    <i class="fas fa-search fa-4x mb-4" style="color: var(--secondary-color);"></i>
+                    <i class="fas fa-search fa-4x mb-4" style="color: #30318b;"></i>
                     <h4 class="mb-3">Tidak ada posisi terbuka saat ini</h4>
                     <p class="text-muted">Silakan cek kembali nanti untuk kesempatan bergabung dengan kami</p>
                 </div>
@@ -109,9 +107,9 @@
                 <div class="col-md-12 text-center">
                     <p class="mb-0">&copy; 2025. PT Kirana Food International. All rights reserved.</p>
                     <div class="icon-sosmed">
-                        <a href="https://kfifood.com/" class="mx-2" target="_blank" style="color: var(--bluedark-color);"><i class="fas fa-globe"></i></a>
-                        <a href="https://www.linkedin.com/company/kirana-food-international/" target="_blank" class="mx-2" style="color: var(--bluedark-color);"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://www.instagram.com/kiranafood.international/" class="mx-2" target="_blank" style="color: var(--bluedark-color);"><i class="fab fa-instagram"></i></a>
+                        <a href="https://kfifood.com/" class="mx-2" target="_blank" style="color: #4e4e4e;"><i class="fas fa-globe"></i></a>
+                        <a href="https://www.linkedin.com/company/kirana-food-international/" target="_blank" class="mx-2" style="color: #4e4e4e;"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/kiranafood.international/" class="mx-2" target="_blank" style="color: #4e4e4e;"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
