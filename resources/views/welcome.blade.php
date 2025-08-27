@@ -23,13 +23,38 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+    <style>
+      @media (max-width: 500px) {
+    .welcome-section {
+        background: url("/landing-page.jpg") no-repeat left center;
+        background-size: cover;   /* gambar tetap cover full, tapi fokus kiri */
+        padding: 50px 20px 60px; /* kasih jarak atas supaya teks agak turun */
+    }
+
+    .welcome_title {
+        font-size: 2rem;   /* perkecil supaya pas di layar kecil */
+        line-height: 1.3;
+    }
+
+    .welcome-section p {
+        font-size: 1rem;   /* sesuaikan ukuran teks mobile */
+    }
+}
+ @media (min-width: 768px) {
+    .welcome-section {
+        background: url("/landing-page.jpg") no-repeat center center;
+        background-size: cover;   /* gambar tetap cover full, tapi fokus kiri */
+        padding: 50px 20px 60px; /* kasih jarak atas supaya teks agak turun */
+    }
+}
+</style>
 
 </head>
 <body>
     @include('layouts.partials.navbar')
     <!-- Welcome Section -->
 <section class="welcome-section">
-    <div class="container h-100" style="max-width: 1400px;">
+    <div class="container h-100" style="max-width: 1500px;">
         <div class="row align-items-center h-100">
             <div class="col-lg-4 col-md-6">
                 <h2 class="welcome_title animate__animated animate__fadeInUp">

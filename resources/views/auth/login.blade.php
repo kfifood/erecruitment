@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login K-SCRAB</title>
+    <title>Login KFI-Vote</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,162 +17,118 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    
     <style>
-        :root {
-            --primary-color: #3498db;
-            --gradient-primary: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
-        }
-        
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        .login-page {
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
             display: flex;
+            justify-content: center;
             align-items: center;
+
+            /* Animasi background */
+            background: linear-gradient(-45deg, #6a11cb, #2575fc, #20c997, #007bff);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
         }
-        
-        .card {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        
-        .card-header {
-            border: none;
-            padding: 1.5rem;
+
+        .login-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            text-align: center;
         }
-        
-        .form-control-lg {
+
+        .login-card img {
+            max-width: 120px;
+            margin-bottom: 1rem;
+        }
+
+        .login-card h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 10px;
             padding: 0.75rem 1rem;
-            font-size: 1rem;
         }
-        
+
         .input-group-text {
-            background-color: white;
+            border-radius: 10px 0 0 10px;
         }
-        
-        .toggle-password {
-            border-left: 0;
+
+        .btn-login {
+            background: linear-gradient(135deg, #004e92, #000428);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem;
+            font-weight: 600;
+            color: #fff;
+            transition: 0.3s;
         }
-        
-        .toggle-password:hover {
-            background-color: #e9ecef;
-        }
-        
-        .btn-lg {
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        .rounded-pill {
-            border-radius: 50rem !important;
+
+        .btn-login:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <div class="login-page">
-        <div class="container">
-            <div class="row justify-content-center align-items-center min-vh-100">
-                <div class="col-md-8 col-lg-6">
-                    <div class="card border-0 shadow-lg">
-                        <div class="card-header py-4" style="background: var(--gradient-primary);">
-                            <h3 class="text-center text-white fw-bold fs-4 mb-0">{{ __('Login to K-CRAB') }}</h3>
-                        </div>
+    <div class="login-card">
+        <!-- Logo -->
+        <img src="{{ asset('fevicon.png') }}" alt="Logo">
+        <h4>Login K-CRAB</h4>
 
-                        <div class="card-body p-5">
-                            <form method="POST" action="{{ route('login') }}">
-                                @csrf
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input id="username" type="text" 
+                        class="form-control @error('username') is-invalid @enderror" 
+                        name="username" value="{{ old('username') }}" required autocomplete="username" autofocus
+                        placeholder="Username">
+                </div>
+                @error('username')
+                    <span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
 
-                                <div class="mb-4">
-                                    <label for="username" class="form-label">{{ __('Username') }}</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user text-primary"></i>
-                                        </span>
-                                        <input id="username" type="text" 
-                                            class="form-control form-control-lg @error('username') is-invalid @enderror" 
-                                            name="username" value="{{ old('username') }}" 
-                                            required autocomplete="username" autofocus
-                                            placeholder="Masukkan username Anda">
-                                    </div>
-                                    @error('username')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input id="password" type="password" 
+                        class="form-control @error('password') is-invalid @enderror" 
+                        name="password" required autocomplete="current-password"
+                        placeholder="Password">
+                </div>
+                @error('password')
+                    <span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
 
-                                <div class="mb-4">
-                                    <label for="password" class="form-label">{{ __('Password') }}</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-lock text-primary"></i>
-                                        </span>
-                                        <input id="password" type="password" 
-                                            class="form-control form-control-lg @error('password') is-invalid @enderror" 
-                                            name="password" required autocomplete="current-password"
-                                            placeholder="Masukkan password Anda">
-                                        <button class="btn btn-outline-secondary toggle-password" type="button">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    @error('password')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="d-grid mb-4">
-                                    <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3" style="background: var(--gradient-primary); border: none;">
-                                        {{ __('Login') }} <i class="fas fa-sign-in-alt ms-2"></i>
-                                    </button>
-                                </div>
-
-                                @if (Route::has('password.request'))
-                                    <div class="text-center">
-                                        <a class="text-decoration-none" href="{{ route('password.request') }}" style="color: var(--primary-color);">
-                                            {{ __('Forgot Your Password?') }}
-                                        </a>
-                                    </div>
-                                @endif
-                            </form>
-                        </div>
-                    </div>
+            <div class="d-flex justify-content-start mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                    <label class="form-check-label" for="remember">Remember Me</label>
                 </div>
             </div>
-        </div>
+
+            <button type="submit" class="btn btn-login w-100">LOGIN</button>
+        </form>
     </div>
 
-    <!-- jQuery and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const togglePassword = document.querySelector('.toggle-password');
-            const password = document.querySelector('#password');
-            
-            togglePassword.addEventListener('click', function() {
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-                this.querySelector('i').classList.toggle('fa-eye-slash');
-            });
-        });
-    </script>
 </body>
 </html>

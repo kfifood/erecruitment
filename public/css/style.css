@@ -47,22 +47,6 @@
     width: 80%;
 }
 
-.badge-user {
-    background-color: #eaf0ff;
-    padding: 8px 15px;
-    border-radius: 15px;
-    color: #2a63d4;
-    font-weight: 600;
-}
-
-.btn-logout {
-    border: none;
-    background: none;
-    color: #dc3545;
-    font-weight: 600;
-    padding: 0;
-}
-
 .btn-logout:hover {
     text-decoration: underline;
 }
@@ -155,21 +139,6 @@
     line-height: 1.4;
 }
         
-        .btn-login {
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 8px 25px;
-            font-weight: 600;
-            border-radius: 30px;
-            transition: all 0.3s;
-        }
-        
-        .btn-login:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
         
         .btn-rekrutmen {
             display: inline-block;
@@ -312,7 +281,7 @@
 /* Style untuk tombol logout */
 .btn-logout {
     background-color: transparent;
-    color: #dc3545;
+    color: #e8f4ff;
     border: none;
     padding: 8px 15px;
     border-radius: 20px;
@@ -321,10 +290,6 @@
     align-items: center;
 }
 
-.btn-logout:hover {
-    background-color: #FEFEFE;
-    color: #dc3545;
-}
 
 .btn-logout i {
     //margin-right: 5px;
@@ -340,7 +305,7 @@
 
 /* Style untuk badge nama user */
 .badge-user {
-    background-color: rgba(37, 99, 235, 0.1);
+    background-color: #e8f4ff;
     color: var(--primary-color);
     padding: 5px 10px;
     border-radius: 20px;

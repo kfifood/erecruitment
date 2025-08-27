@@ -337,7 +337,7 @@
                         <div class="d-flex align-items-center">
                             <!-- Logo di sebelah kiri -->
                             <div class="header-logo me-4">
-                                <img src="{{ asset('logo.png') }}" alt="Logo PT Kirana Food International"
+                                <img src="{{ asset('fevicon.png') }}" alt="Logo PT Kirana Food International"
                                     class="company-logo">
                             </div>
 
@@ -348,7 +348,7 @@
                             <div class="header-text ms-4">
                                 <h1 class="header-title">FORMULIR LAMARAN KERJA</h1>
                                 <div class="position-applied">
-                                    <strong>Posisi yang Dilamar:</strong> {{ $job->position }}
+                                    <strong>Posisi yang Dilamar:</strong> <br>{{ $job->position }}
                                 </div>
                             </div>
                         </div>
@@ -470,12 +470,13 @@
                                         <img id="photoPreview" class="form-photo-preview" src="#" alt="Preview Foto">
                                         <input type="file" id="photo" name="photo" accept="image/jpeg,image/png"
                                             required onchange="previewImage(this, 'photoPreview')">
-                                    </div>
-                                    <div>
+                                        <div>
                                         <div class="form-note">Format: JPG/PNG (maks. 2MB)</div>
                                         <div class="form-note">Ukuran: 3x4 cm</div>
                                         <div class="form-note">Background: Bebas (disarankan merah)</div>
                                     </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
 

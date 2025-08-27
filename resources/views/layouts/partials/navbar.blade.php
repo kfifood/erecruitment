@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-light shadow-sm">
-    <div class="container-fluid d-flex" style="width:1400px;">
+    <div class="container-fluid d-flex" style="width:1500px;">
         <!-- Logo dan Brand -->
         <div class="d-flex align-items-center">
             <img src="{{ asset('logo.png') }}" alt="Kirana Logo" class="logo-img" style="height: 40px;" />
