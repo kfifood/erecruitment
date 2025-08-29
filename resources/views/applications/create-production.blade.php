@@ -398,7 +398,7 @@
         }
     }
     </style>
-    
+
 </head>
 
 <body>
@@ -543,13 +543,13 @@
                                         <img id="photoPreview" class="form-photo-preview" src="#" alt="Preview Foto">
                                         <input type="file" id="photo" name="photo" accept="image/jpeg,image/png"
                                             required onchange="previewImage(this, 'photoPreview')">
-                                            <div>
-                                        <div class="form-note">Format: JPG/PNG (maks. 2MB)</div>
-                                        <div class="form-note">Ukuran: 3x4 cm</div>
-                                        <div class="form-note">Background: Bebas (disarankan merah)</div>
+                                        <div>
+                                            <div class="form-note">Format: JPG/PNG (maks. 2MB)</div>
+                                            <div class="form-note">Ukuran: 3x4 cm</div>
+                                            <div class="form-note">Background: Bebas (disarankan merah)</div>
+                                        </div>
                                     </div>
-                                    </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -574,7 +574,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2">
-                                    
+
                                     <div class="col-md-6">
                                         <label for="district"
                                             class="form-label required-field"><small>Kecamatan</small></label>
@@ -1187,50 +1187,57 @@
         }
     }
 
-    // Fungsi untuk menggabungkan alamat
-function buildFullAddress() {
-    const street = document.getElementById('street').value;
-    const rt = document.getElementById('rt').value;
-    const rw = document.getElementById('rw').value;
-    
-    // Dapatkan teks yang dipilih dari dropdown
-    const villageSelect = document.getElementById('village');
-    const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
-    
-    const districtSelect = document.getElementById('district');
-    const district = districtSelect.options[districtSelect.selectedIndex]?.text || '';
-    
-    const citySelect = document.getElementById('city');
-    const city = citySelect.options[citySelect.selectedIndex]?.text || '';
-    
-    const provinceSelect = document.getElementById('province');
-    const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
+    const addressFields = ['street', 'rt', 'rw', 'village', 'district', 'city', 'province'];
+    addressFields.forEach(field => {
+        const element = document.getElementById(field);
+        if (element) {
+            element.addEventListener('change', buildFullAddress);
+            element.addEventListener('keyup', buildFullAddress);
+        }
+    });
 
-    let addressParts = [];
+    function buildFullAddress() {
+        const street = document.getElementById('street').value;
+        const rt = document.getElementById('rt').value;
+        const rw = document.getElementById('rw').value;
 
-    if (street) addressParts.push(street);
-    if (rt || rw) {
-        addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
+        // Dapatkan teks yang dipilih dari dropdown, bukan value
+        const villageSelect = document.getElementById('village');
+        const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
+
+        const districtSelect = document.getElementById('district');
+        const district = districtSelect.options[districtSelect.selectedIndex]?.text || '';
+
+        const citySelect = document.getElementById('city');
+        const city = citySelect.options[citySelect.selectedIndex]?.text || '';
+
+        const provinceSelect = document.getElementById('province');
+        const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
+
+        let addressParts = [];
+
+        if (street) addressParts.push(street);
+        if (rt || rw) {
+            addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
+        }
+        if (village) addressParts.push(`Desa/Kel. ${village}`);
+        if (district) addressParts.push(`Kec. ${district}`);
+        if (city) addressParts.push(`Kab./Kota ${city}`);
+        if (province) addressParts.push(`Prov. ${province}`);
+
+        const fullAddress = addressParts.join(', ');
+        document.getElementById('address').value = fullAddress;
+
+        return fullAddress;
     }
-    if (village) addressParts.push(`Desa/Kel. ${village}`);
-    if (district) addressParts.push(`Kec. ${district}`);
-    if (city) addressParts.push(`Kab./Kota ${city}`);
-    if (province) addressParts.push(`Prov. ${province}`);
-
-    const fullAddress = addressParts.join(', ');
-    document.getElementById('address').value = fullAddress;
-
-    return fullAddress;
-}
-// Tambahkan event listener untuk dropdown alamat
-const addressDropdowns = ['province', 'city', 'district', 'village'];
-addressDropdowns.forEach(dropdown => {
-    const element = document.getElementById(dropdown);
-    if (element) {
-        element.addEventListener('change', buildFullAddress);
-    }
-});
-
+    // Tambahkan event listener untuk dropdown alamat
+    const addressDropdowns = ['province', 'city', 'district', 'village'];
+    addressDropdowns.forEach(dropdown => {
+        const element = document.getElementById(dropdown);
+        if (element) {
+            element.addEventListener('change', buildFullAddress);
+        }
+    });
     // Fungsi validasi step
     function validateStep(step) {
         let isValid = true;
@@ -1659,6 +1666,7 @@ addressDropdowns.forEach(dropdown => {
 
     // Validasi sebelum submit
     document.getElementById('applicationForm').addEventListener('submit', function(e) {
+        buildFullAddress();
         e.preventDefault();
 
         const form = this;

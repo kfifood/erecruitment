@@ -891,7 +891,7 @@
                             </button>
 
                             <!-- Kontak Darurat -->
-                            <h5 class="section-title">Orang yang Dapat Dihubungi (Darurat)</h5>
+                            <h5 class="section-title required-field">Orang yang Dapat Dihubungi (Darurat)</h5>
                             <div id="emergencyContactsContainer">
                                 <div class="education-form">
                                     <div class="row">
@@ -1324,13 +1324,12 @@ function proceedToNextStep(current, next) {
             element.addEventListener('keyup', buildFullAddress);
         }
     });
-    // Fungsi untuk menggabungkan alamat
-function buildFullAddress() {
+    function buildFullAddress() {
     const street = document.getElementById('street').value;
     const rt = document.getElementById('rt').value;
     const rw = document.getElementById('rw').value;
     
-    // Dapatkan teks yang dipilih dari dropdown
+    // Dapatkan teks yang dipilih dari dropdown, bukan value
     const villageSelect = document.getElementById('village');
     const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
     
@@ -1359,6 +1358,7 @@ function buildFullAddress() {
 
     return fullAddress;
 }
+
 // Tambahkan event listener untuk dropdown alamat
 const addressDropdowns = ['province', 'city', 'district', 'village'];
 addressDropdowns.forEach(dropdown => {
@@ -1932,32 +1932,6 @@ addressDropdowns.forEach(dropdown => {
         document.getElementById(`socialActivity_${id}`).remove();
     }
 
-    function buildFullAddress() {
-        const street = document.getElementById('street').value;
-        const rt = document.getElementById('rt').value;
-        const rw = document.getElementById('rw').value;
-        const village = document.getElementById('village').value;
-        const district = document.getElementById('district').value;
-        const city = document.getElementById('city').value;
-        const province = document.getElementById('province').value;
-
-        let addressParts = [];
-
-        if (street) addressParts.push(street);
-        if (rt || rw) {
-            addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
-        }
-        if (village) addressParts.push(`Desa/Kel. ${village}`);
-        if (district) addressParts.push(`Kec. ${district}`);
-        if (city) addressParts.push(`Kab./Kota ${city}`);
-        if (province) addressParts.push(`Prov. ${province}`);
-
-        const fullAddress = addressParts.join(', ');
-        document.getElementById('address').value = fullAddress;
-
-        return fullAddress;
-    }
-
     // Fungsi untuk menampilkan alert konfirmasi gender
 function showGenderConfirmationAlert() {
     const jobGender = document.getElementById('job_gender').value;
@@ -1985,6 +1959,8 @@ function showGenderConfirmationAlert() {
 
     // Validasi sebelum submit
     document.getElementById('applicationForm').addEventListener('submit', function(e) {
+        
+        buildFullAddress();
         e.preventDefault();
 
         const form = this;
