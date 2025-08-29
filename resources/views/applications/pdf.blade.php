@@ -6,7 +6,7 @@
     <title>BIODATA PELAMAR - {{ $application->full_name }}</title>
     <style>
     body {
-        font-family: Arial, sans-serif;
+        font-family: Times,"Times New Roman", serif;
         font-size: 12px;
         line-height: 1.5;
     }
@@ -124,9 +124,6 @@
         <p>[Tidak ada foto]</p>
         @endif
     </div><br>
-    <div class="form-group">
-        <div class="form-title">No : /HRD/ / /</div>
-    </div>
 
     <div class="section">
         <table class="info-table" style="width: 80%;">
@@ -242,19 +239,7 @@
         </table>
     </div>
 
-    <div class="footer">
-        <div>No. Dokumen : FF/KFI/VII-01.01</div>
-        <div>Edisi/Revisi : 1/0</div>
-        <div>Tanggal : 1-02-2021</div>
-        <div>Halaman : 1 dari 3</div>
-    </div>
-
     <!-- Halaman 2: Kursus, Referensi, Bahasa, Komputer, Kegiatan Sosial -->
-    <div class="page-break"></div>
-    <div class="header">
-        <h1>BIODATA PELAMAR</h1>
-        <p>Curriculum Vitae of Employee</p>
-    </div>
 
     <div class="section">
         <h2>Sertifikasi/Pelatihan yang Pernah Diikuti</h2>
@@ -347,19 +332,8 @@
         </table>
     </div>
 
-    <div class="footer">
-        <div>No. Dokumen : FF/KFI/VII-01.01</div>
-        <div>Edisi/Revisi : 1/0</div>
-        <div>Tanggal : 1-02-2021</div>
-        <div>Halaman : 2 dari 3</div>
-    </div>
 
     <!-- Halaman 3: Bahasa, Komputer, Kegiatan Sosial, Riwayat Pekerjaan, Pertanyaan -->
-    <div class="page-break"></div>
-    <div class="header">
-        <h1>BIODATA PELAMAR</h1>
-        <p>Curriculum Vitae of Employee</p>
-    </div>
 
     <div class="section">
         <h2>Pengetahuan Bahasa (Diisi dengan : [ * ])</h2>
@@ -508,13 +482,6 @@
                 {{ $application->weaknesses ?? '-' }}
             </div>
         </div>
-    </div>
-
-    <div class="footer">
-        <div>No. Dokumen : FF/KFI/VII-01.01</div>
-        <div>Edisi/Revisi : 1/0</div>
-        <div>Tanggal : 1-02-2021</div>
-        <div>Halaman : 3 dari 3</div>
     </div>
 </body>
 

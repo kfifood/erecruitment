@@ -5,7 +5,7 @@
     <title>PERTANYAAN OFFICE - {{ $application->full_name }}</title>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: Times,"Times New Roman", serif; 
             font-size: 12px;
             line-height: 1.5;
         }
@@ -215,13 +215,6 @@
         @else
         <p>Tidak ada data pertanyaan yang tersedia.</p>
         @endif
-    </div>
-
-    <div class="footer">
-        <div>No. Dokumen : FF/KFI/VII-01.01</div>
-        <div>Edisi/Revisi : 1/0</div>
-        <div>Tanggal : 1-02-2021</div>
-        <div>Halaman : Pertanyaan Office</div>
     </div>
 </body>
 </html>
