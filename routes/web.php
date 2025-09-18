@@ -72,8 +72,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/nextcloud-file/{path}', [ApplicationController::class, 'proxyNextcloudFile'])
-    ->where('path', '.*')
-    ->name('nextcloud.file.proxy');
+    ->where('path', '.*') ->name('nextcloud.file.proxy');
 
     // PDF Related
     Route::get('/applications/{id}/print', [ApplicationPdfController::class, 'generatePdf'])
