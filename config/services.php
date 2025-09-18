@@ -30,4 +30,16 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'nextcloud' => [
+    'base_url' => env('NEXTCLOUD_BASE_URL', 'https://nextcloud.kfifood.com'),
+    'username' => env('NEXTCLOUD_USERNAME', 'induction'),
+    'password' => env('NEXTCLOUD_PASSWORD', '@Human2025'),
+    'webdav_path' => env('NEXTCLOUD_WEBDAV_PATH', '/remote.php/dav/files/induction'),
+    'folders' => [
+        'photos' => 'foto',
+        'cvs' => 'cv',
+        'cover_letters' => 'cover',
+        'certificates' => 'certificate'
+    ]
+],
 ];

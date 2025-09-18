@@ -33,6 +33,10 @@ Route::prefix('api')->group(function () {
     Route::get('/districts/{regencyId}', [RegionController::class, 'getDistricts']);
     Route::get('/villages/{districtId}', [RegionController::class, 'getVillages']);
 });
+
+Route::get('/nextcloud-file/{path}', [ApplicationController::class, 'proxyNextcloudFile'])
+    ->where('path', '.*')
+    ->name('nextcloud.file.proxy');
 // Dashboard Route (Protected)
 Route::middleware(['auth'])->group(function () {
     // Dashboard

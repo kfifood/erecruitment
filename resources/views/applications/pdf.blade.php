@@ -118,13 +118,22 @@
     </div>
 
     <div class="photo">
-        @if($application->photo)
-        <img src="{{ public_path($application->photo) }}" alt="Foto Pelamar">
-        @else
-        <p>[Tidak ada foto]</p>
-        @endif
-    </div><br>
-
+@if($application->photo)
+    @php
+        // Gunakan method khusus untuk mendapatkan image data
+        $imageData = App\Http\Controllers\ApplicationPdfController::getImageBase64($application->photo);
+    @endphp
+    
+    @if($imageData)
+        <img src="data:image/jpeg;base64,{{ $imageData }}" alt="Foto Pelamar" 
+             style="width: 120px; height: 160px; border: 1px solid #ddd; object-fit: cover;">
+    @else
+        <p>[Foto tidak dapat diakses]</p>
+    @endif
+@else
+    <p>[Tidak ada foto]</p>
+@endif
+</div><br>
     <div class="section">
         <table class="info-table" style="width: 80%;">
             <tr>
