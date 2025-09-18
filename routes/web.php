@@ -34,9 +34,7 @@ Route::prefix('api')->group(function () {
     Route::get('/villages/{districtId}', [RegionController::class, 'getVillages']);
 });
 
-Route::get('/nextcloud-file/{path}', [ApplicationController::class, 'proxyNextcloudFile'])
-    ->where('path', '.*')
-    ->name('nextcloud.file.proxy');
+
 // Dashboard Route (Protected)
 Route::middleware(['auth'])->group(function () {
     // Dashboard
@@ -72,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/review-list-production', [ApplicationController::class, 'reviewListProduction'])
             ->name('applications.review-list-production');
     });
+
+    Route::get('/nextcloud-file/{path}', [ApplicationController::class, 'proxyNextcloudFile'])
+    ->where('path', '.*')
+    ->name('nextcloud.file.proxy');
 
     // PDF Related
     Route::get('/applications/{id}/print', [ApplicationPdfController::class, 'generatePdf'])
