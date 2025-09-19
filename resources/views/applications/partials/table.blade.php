@@ -1,6 +1,5 @@
 <!-- Tambahkan di bagian atas content (setelah <h3>) -->
-<div class="modal fade" id="editStatusModal" tabindex="-1" aria-labelledby="editStatusModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="editStatusModal" tabindex="-1" aria-labelledby="editStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <!-- Ubah ke modal-xl untuk ukuran extra large -->
         <div class="modal-content">
@@ -44,15 +43,15 @@
                 <tr>
                     <td>
                         @if($application->photo)
-                            @if(strpos($application->photo, '/remote.php/dav/files/') === 0)
-                                <!-- File dari Nextcloud -->
-                                <img src="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->photo) }}" 
-                                     alt="Foto Pelamar" style="width: 50px; height: 50px; object-fit: cover;">
-                            @else
-                                <!-- File lokal -->
-                                <img src="{{ asset($application->photo) }}" alt="Foto Pelamar"
-                                    style="width: 50px; height: 50px; object-fit: cover;">
-                            @endif
+                        @if(strpos($application->photo, '/remote.php/dav/files/') === 0)
+                        <!-- File dari Nextcloud -->
+                        <img src="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->photo) }}"
+                            alt="Foto Pelamar" style="width: 50px; height: 50px; object-fit: cover;">
+                        @else
+                        <!-- File lokal -->
+                        <img src="{{ asset($application->photo) }}" alt="Foto Pelamar"
+                            style="width: 50px; height: 50px; object-fit: cover;">
+                        @endif
                         @else
                         <span class="text-muted">No photo</span>
                         @endif
@@ -87,40 +86,40 @@
                     <td>{{ $application->created_at->format('d M Y') }}</td>
                     <td>
                         @if($application->cv)
-                            @if(strpos($application->cv, '/remote.php/dav/files/') === 0)
-                                <!-- File dari Nextcloud -->
-                                <a href="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->cv) }}" 
-                                   target="_blank" title="Download CV" class="text-primary">
-                                    {{ basename($application->cv) }}
-                                </a>
-                            @else
-                                <!-- File lokal -->
-                                <a href="{{ asset($application->cv) }}" target="_blank" title="Download CV"
-                                    class="text-primary">
-                                    {{ basename($application->cv) }}
-                                </a>
-                            @endif
+                        @if(strpos($application->cv, '/remote.php/dav/files/') === 0)
+                        <!-- File dari Nextcloud -->
+                        <a href="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->cv) }}"
+                            target="_blank" title="Download CV" class="text-primary">
+                            {{ basename($application->cv) }}
+                        </a>
                         @else
-                            <span class="text-muted">No CV</span>
+                        <!-- File lokal -->
+                        <a href="{{ asset($application->cv) }}" target="_blank" title="Download CV"
+                            class="text-primary">
+                            {{ basename($application->cv) }}
+                        </a>
+                        @endif
+                        @else
+                        <span class="text-muted">No CV</span>
                         @endif
                     </td>
                     <td>
                         @if($application->cover_letter)
-                            @if(strpos($application->cover_letter, '/remote.php/dav/files/') === 0)
-                                <!-- File dari Nextcloud -->
-                                <a href="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->cover_letter) }}" 
-                                   target="_blank" title="Download Cover Letter" class="text-primary">
-                                    {{ basename($application->cover_letter) }}
-                                </a>
-                            @else
-                                <!-- File lokal -->
-                                <a href="{{ asset($application->cover_letter) }}" target="_blank"
-                                    title="Download Cover Letter" class="text-primary">
-                                    {{ basename($application->cover_letter) }}
-                                </a>
-                            @endif
+                        @if(strpos($application->cover_letter, '/remote.php/dav/files/') === 0)
+                        <!-- File dari Nextcloud -->
+                        <a href="{{ App\Http\Controllers\ApplicationController::getFileUrl($application->cover_letter) }}"
+                            target="_blank" title="Download Cover Letter" class="text-primary">
+                            {{ basename($application->cover_letter) }}
+                        </a>
                         @else
-                            <span class="text-muted">No Cover Letter</span>
+                        <!-- File lokal -->
+                        <a href="{{ asset($application->cover_letter) }}" target="_blank" title="Download Cover Letter"
+                            class="text-primary">
+                            {{ basename($application->cover_letter) }}
+                        </a>
+                        @endif
+                        @else
+                        <span class="text-muted">No Cover Letter</span>
                         @endif
                     </td>
                     <td>
@@ -142,8 +141,8 @@
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a href="{{ route('applications.preview', $application->id) }}"
-                                class="btn btn-sm btn-info" title="Preview PDF" target="_blank">
+                            <a href="{{ route('applications.preview', $application->id) }}" class="btn btn-sm btn-info"
+                                title="Preview PDF" target="_blank">
                                 <i class="fas fa-eye"></i> Preview
                             </a>
                             <a href="{{ route('applications.download', $application->id) }}"
