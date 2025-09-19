@@ -1666,11 +1666,16 @@
 
     // Validasi sebelum submit
     document.getElementById('applicationForm').addEventListener('submit', function(e) {
+
         buildFullAddress();
         e.preventDefault();
 
         const form = this;
         const formData = new FormData(form);
+
+        // Generate unique submission token
+        const submissionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        formData.append('submission_token', submissionToken);
 
         Swal.fire({
             title: 'Kirim Lamaran?',
@@ -1696,7 +1701,8 @@
                                 headers: {
                                     'Accept': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector(
-                                        'meta[name="csrf-token"]').content
+                                        'meta[name="csrf-token"]').content,
+                                    'X-Submission-Token': submissionToken
                                 },
                                 credentials: 'include'
                             })
@@ -1719,7 +1725,8 @@
                             .catch(error => {
                                 Swal.fire({
                                     title: 'Error!',
-                                    text: error.message,
+                                    text: error.message ||
+                                        'Terjadi kesalahan saat mengirim lamaran',
                                     icon: 'error'
                                 });
                             });
@@ -1728,7 +1735,6 @@
             }
         });
     });
-
     // Inisialisasi
     document.addEventListener('DOMContentLoaded', function() {
         // Update progress bar untuk step pertama

@@ -471,16 +471,16 @@
                                         <input type="file" id="photo" name="photo" accept="image/jpeg,image/png"
                                             required onchange="previewImage(this, 'photoPreview')">
                                         <div>
-                                        <div class="form-note">Format: JPG/PNG (maks. 2MB)</div>
-                                        <div class="form-note">Ukuran: 3x4 cm</div>
-                                        <div class="form-note">Background: Bebas (disarankan merah)</div>
+                                            <div class="form-note">Format: JPG/PNG (maks. 2MB)</div>
+                                            <div class="form-note">Ukuran: 3x4 cm</div>
+                                            <div class="form-note">Background: Bebas (disarankan merah)</div>
+                                        </div>
                                     </div>
-                                    </div>
-                                    
+
                                 </div>
                             </div>
 
-                           <!-- Data Alamat dan Kontak -->
+                            <!-- Data Alamat dan Kontak -->
                             <div class="mb-3">
                                 <label for="address" class="form-label required-field">Alamat Lengkap</label>
 
@@ -501,7 +501,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2">
-                                    
+
                                     <div class="col-md-6">
                                         <label for="district"
                                             class="form-label required-field"><small>Kecamatan</small></label>
@@ -1227,63 +1227,63 @@
         }
     }
 
-   // Fungsi untuk menampilkan alert konfirmasi gender
-function showGenderConfirmationAlert() {
-    const jobGender = document.getElementById('job_gender').value;
-    let genderMessage = '';
-    
-    if (jobGender === 'pria') {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Pria untuk menyesuaikan kebutuhan kami';
-    } else if (jobGender === 'wanita') {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Wanita untuk menyesuaikan kebutuhan kami';
-    } else {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Pria/Wanita untuk menyesuaikan kebutuhan kami';
-    }
-    
-    return Swal.fire({
-        title: 'Konfirmasi Jenis Kelamin',
-        text: genderMessage,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonColor: 'var(--primary-color)',
-        cancelButtonColor: 'var(--secondary-color)',
-        confirmButtonText: 'Ya, Sudah Benar',
-        cancelButtonText: 'Periksa Kembali'
-    });
-}
+    // Fungsi untuk menampilkan alert konfirmasi gender
+    function showGenderConfirmationAlert() {
+        const jobGender = document.getElementById('job_gender').value;
+        let genderMessage = '';
 
-// Modifikasi fungsi nextStep untuk menambahkan validasi gender
-function nextStep(current, next) {
-    // Validasi step saat ini sebelum lanjut
-    if (!validateStep(current)) {
-        return;
-    }
-    
-    // Tampilkan konfirmasi gender sebelum melanjutkan ke step 2
-    if (current === 1 && next === 2) {
-        showGenderConfirmationAlert().then((result) => {
-            if (result.isConfirmed) {
-                proceedToNextStep(current, next);
-            }
+        if (jobGender === 'pria') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria untuk menyesuaikan kebutuhan kami';
+        } else if (jobGender === 'wanita') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Wanita untuk menyesuaikan kebutuhan kami';
+        } else {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria/Wanita untuk menyesuaikan kebutuhan kami';
+        }
+
+        return Swal.fire({
+            title: 'Konfirmasi Jenis Kelamin',
+            text: genderMessage,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary-color)',
+            cancelButtonColor: 'var(--secondary-color)',
+            confirmButtonText: 'Ya, Sudah Benar',
+            cancelButtonText: 'Periksa Kembali'
         });
-    } else {
-        proceedToNextStep(current, next);
     }
-}
+
+    // Modifikasi fungsi nextStep untuk menambahkan validasi gender
+    function nextStep(current, next) {
+        // Validasi step saat ini sebelum lanjut
+        if (!validateStep(current)) {
+            return;
+        }
+
+        // Tampilkan konfirmasi gender sebelum melanjutkan ke step 2
+        if (current === 1 && next === 2) {
+            showGenderConfirmationAlert().then((result) => {
+                if (result.isConfirmed) {
+                    proceedToNextStep(current, next);
+                }
+            });
+        } else {
+            proceedToNextStep(current, next);
+        }
+    }
     // Fungsi untuk melanjutkan ke step berikutnya
-function proceedToNextStep(current, next) {
-    document.getElementById(`step${current}`).classList.remove('active');
-    document.getElementById(`step${next}`).classList.add('active');
+    function proceedToNextStep(current, next) {
+        document.getElementById(`step${current}`).classList.remove('active');
+        document.getElementById(`step${next}`).classList.add('active');
 
-    // Update progress bar
-    updateProgressBar(next);
+        // Update progress bar
+        updateProgressBar(next);
 
-    // Scroll ke atas
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
+        // Scroll ke atas
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
 
     function prevStep(current, prev) {
         document.getElementById(`step${current}`).classList.remove('active');
@@ -1324,49 +1324,50 @@ function proceedToNextStep(current, next) {
             element.addEventListener('keyup', buildFullAddress);
         }
     });
+
     function buildFullAddress() {
-    const street = document.getElementById('street').value;
-    const rt = document.getElementById('rt').value;
-    const rw = document.getElementById('rw').value;
-    
-    // Dapatkan teks yang dipilih dari dropdown, bukan value
-    const villageSelect = document.getElementById('village');
-    const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
-    
-    const districtSelect = document.getElementById('district');
-    const district = districtSelect.options[districtSelect.selectedIndex]?.text || '';
-    
-    const citySelect = document.getElementById('city');
-    const city = citySelect.options[citySelect.selectedIndex]?.text || '';
-    
-    const provinceSelect = document.getElementById('province');
-    const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
+        const street = document.getElementById('street').value;
+        const rt = document.getElementById('rt').value;
+        const rw = document.getElementById('rw').value;
 
-    let addressParts = [];
+        // Dapatkan teks yang dipilih dari dropdown, bukan value
+        const villageSelect = document.getElementById('village');
+        const village = villageSelect.options[villageSelect.selectedIndex]?.text || '';
 
-    if (street) addressParts.push(street);
-    if (rt || rw) {
-        addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
+        const districtSelect = document.getElementById('district');
+        const district = districtSelect.options[districtSelect.selectedIndex]?.text || '';
+
+        const citySelect = document.getElementById('city');
+        const city = citySelect.options[citySelect.selectedIndex]?.text || '';
+
+        const provinceSelect = document.getElementById('province');
+        const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || '';
+
+        let addressParts = [];
+
+        if (street) addressParts.push(street);
+        if (rt || rw) {
+            addressParts.push(`RT ${rt || '00'}/RW ${rw || '00'}`);
+        }
+        if (village) addressParts.push(`Desa/Kel. ${village}`);
+        if (district) addressParts.push(`Kec. ${district}`);
+        if (city) addressParts.push(`Kab./Kota ${city}`);
+        if (province) addressParts.push(`Prov. ${province}`);
+
+        const fullAddress = addressParts.join(', ');
+        document.getElementById('address').value = fullAddress;
+
+        return fullAddress;
     }
-    if (village) addressParts.push(`Desa/Kel. ${village}`);
-    if (district) addressParts.push(`Kec. ${district}`);
-    if (city) addressParts.push(`Kab./Kota ${city}`);
-    if (province) addressParts.push(`Prov. ${province}`);
 
-    const fullAddress = addressParts.join(', ');
-    document.getElementById('address').value = fullAddress;
-
-    return fullAddress;
-}
-
-// Tambahkan event listener untuk dropdown alamat
-const addressDropdowns = ['province', 'city', 'district', 'village'];
-addressDropdowns.forEach(dropdown => {
-    const element = document.getElementById(dropdown);
-    if (element) {
-        element.addEventListener('change', buildFullAddress);
-    }
-});
+    // Tambahkan event listener untuk dropdown alamat
+    const addressDropdowns = ['province', 'city', 'district', 'village'];
+    addressDropdowns.forEach(dropdown => {
+        const element = document.getElementById(dropdown);
+        if (element) {
+            element.addEventListener('change', buildFullAddress);
+        }
+    });
     // Fungsi validasi step
     // Fungsi validasi step
     function validateStep(step) {
@@ -1933,38 +1934,42 @@ addressDropdowns.forEach(dropdown => {
     }
 
     // Fungsi untuk menampilkan alert konfirmasi gender
-function showGenderConfirmationAlert() {
-    const jobGender = document.getElementById('job_gender').value;
-    let genderMessage = '';
-    
-    if (jobGender === 'pria') {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Pria untuk menyesuaikan kebutuhan kami';
-    } else if (jobGender === 'wanita') {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Wanita untuk menyesuaikan kebutuhan kami';
-    } else {
-        genderMessage = 'Pastikan jenis kelamin Anda adalah Pria/Wanita untuk menyesuaikan kebutuhan kami';
+    function showGenderConfirmationAlert() {
+        const jobGender = document.getElementById('job_gender').value;
+        let genderMessage = '';
+
+        if (jobGender === 'pria') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria untuk menyesuaikan kebutuhan kami';
+        } else if (jobGender === 'wanita') {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Wanita untuk menyesuaikan kebutuhan kami';
+        } else {
+            genderMessage = 'Pastikan jenis kelamin Anda adalah Pria/Wanita untuk menyesuaikan kebutuhan kami';
+        }
+
+        return Swal.fire({
+            title: 'Konfirmasi Jenis Kelamin',
+            text: genderMessage,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary-color)',
+            cancelButtonColor: 'var(--secondary-color)',
+            confirmButtonText: 'Ya, Sudah Benar',
+            cancelButtonText: 'Periksa Kembali'
+        });
     }
-    
-    return Swal.fire({
-        title: 'Konfirmasi Jenis Kelamin',
-        text: genderMessage,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonColor: 'var(--primary-color)',
-        cancelButtonColor: 'var(--secondary-color)',
-        confirmButtonText: 'Ya, Sudah Benar',
-        cancelButtonText: 'Periksa Kembali'
-    });
-}
 
     // Validasi sebelum submit
     document.getElementById('applicationForm').addEventListener('submit', function(e) {
-        
+
         buildFullAddress();
         e.preventDefault();
 
         const form = this;
         const formData = new FormData(form);
+
+        // Generate unique submission token
+        const submissionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        formData.append('submission_token', submissionToken);
 
         Swal.fire({
             title: 'Kirim Lamaran?',
@@ -1990,7 +1995,8 @@ function showGenderConfirmationAlert() {
                                 headers: {
                                     'Accept': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector(
-                                        'meta[name="csrf-token"]').content
+                                        'meta[name="csrf-token"]').content,
+                                    'X-Submission-Token': submissionToken
                                 },
                                 credentials: 'include'
                             })
@@ -2013,7 +2019,8 @@ function showGenderConfirmationAlert() {
                             .catch(error => {
                                 Swal.fire({
                                     title: 'Error!',
-                                    text: error.message,
+                                    text: error.message ||
+                                        'Terjadi kesalahan saat mengirim lamaran',
                                     icon: 'error'
                                 });
                             });
@@ -2021,7 +2028,6 @@ function showGenderConfirmationAlert() {
                 });
             }
         });
-
     });
 
     // TAMBAHKAN event listener untuk status perkawinan saat form dimuat

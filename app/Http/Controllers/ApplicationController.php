@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class ApplicationController extends Controller
 {
@@ -155,6 +156,19 @@ class ApplicationController extends Controller
 
     public function store(Request $request)
     {
+        // Cek duplicate submission
+        $submissionToken = $request->header('X-Submission-Token') ?? $request->input('submission_token');
+        if ($submissionToken && Cache::has('submission_' . $submissionToken)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Duplicate submission detected. Lamaran Anda sudah dikirim sebelumnya.'
+            ], 429);
+        }
+        
+        // Simpan token untuk 5 menit
+        $token = Str::random(32);
+        Cache::put('submission_' . $token, true, 300);
+
         // Dapatkan job terlebih dahulu
         $job = Job::findOrFail($request->job_id);
         
@@ -162,7 +176,14 @@ class ApplicationController extends Controller
         $baseValidationRules = [
             'job_id' => 'required|exists:jobs,id',
             'full_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('applications')->where(function ($query) use ($request) {
+                    return $query->where('job_id', $request->job_id);
+                })
+            ],
             'address' => 'required|string',
             'birth_place' => 'required|string|max:100',
             'birth_date' => 'required|date',
@@ -262,7 +283,7 @@ class ApplicationController extends Controller
         DB::beginTransaction();
 
         try {
-            // Simpan file utama ke Nextcloud
+            // Simpan file utama ke Nextcloud (hanya Nextcloud, tanpa fallback)
             $photoPath = $this->storeFile($request->file('photo'), 'photos');
             $cvPath = $this->storeFile($request->file('cv'), 'cvs');
             $coverLetterPath = $this->storeFile($request->file('cover_letter'), 'cover_letters');
@@ -518,6 +539,9 @@ class ApplicationController extends Controller
 
             DB::commit();
 
+            // Hapus token setelah berhasil
+            Cache::forget('submission_' . $token);
+
             // Kirim notifikasi WhatsApp
             try {
                 $wablasService = new WablasService();
@@ -535,11 +559,14 @@ class ApplicationController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // Hapus token jika error
+            Cache::forget('submission_' . $token);
+            
             Log::error('Error submitting application: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat mengirim lamaran. Silakan coba lagi.',
-                'error' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'error' => 'Terjadi kesalahan saat mengirim lamaran'
             ], 500);
         }
     }
@@ -631,7 +658,8 @@ class ApplicationController extends Controller
     }
 
     /**
-     * Menyimpan file ke Nextcloud atau fallback ke local storage
+     * Menyimpan file ke Nextcloud saja (tanpa fallback ke local storage)
+     * Jika gagal, langsung throw exception
      */
     private function storeFile($file, $subfolder)
     {
@@ -644,32 +672,12 @@ class ApplicationController extends Controller
             return $remotePath; // Return Nextcloud path
         }
 
-        // Fallback ke local storage jika Nextcloud gagal
-        $basePath = public_path('data/' . $subfolder);
-        
-        if (!file_exists($basePath)) {
-            mkdir($basePath, 0755, true);
-        }
-
-        $cleanName = $this->sanitizeFilename($originalName);
-        $baseName = pathinfo($cleanName, PATHINFO_FILENAME);
-        $extension = pathinfo($cleanName, PATHINFO_EXTENSION);
-
-        $counter = 1;
-        $newName = $cleanName;
-
-        while (file_exists($basePath . '/' . $newName)) {
-            $newName = $baseName . '_' . $counter . '.' . $extension;
-            $counter++;
-        }
-
-        $file->move($basePath, $newName);
-        
-        return 'data/' . $subfolder . '/' . $newName;
+        // Jika gagal, throw exception dengan pesan error
+        throw new \Exception("Gagal mengupload file '$originalName' ke Nextcloud. Silakan coba lagi atau hubungi administrator.");
     }
 
     /**
-     * Hapus file dari Nextcloud atau local storage
+     * Hapus file dari Nextcloud saja
      */
     private function deleteFile($filePath)
     {
@@ -677,16 +685,12 @@ class ApplicationController extends Controller
             return false;
         }
 
-        // Jika file disimpan di Nextcloud (path dimulai dengan /remote.php)
+        // Hanya hapus jika file berasal dari Nextcloud
         if (strpos($filePath, '/remote.php/dav/files/') === 0) {
             return $this->nextcloudService->deleteFile($filePath);
         }
         
-        // Jika file local
-        if (file_exists(public_path($filePath))) {
-            return unlink(public_path($filePath));
-        }
-        
+        // Jika file local, tidak dihapus (karena sekarang hanya Nextcloud)
         return false;
     }
 
@@ -730,52 +734,61 @@ class ApplicationController extends Controller
     /**
      * Mendapatkan URL lengkap untuk file yang disimpan di Nextcloud
      */
-  // ApplicationController.php
-public static function getFileUrl($filePath)
-{
-    if (empty($filePath)) {
-        return null;
-    }
-    
-    // Jika file disimpan di Nextcloud
-    if (strpos($filePath, '/remote.php/dav/files/') === 0) {
-        return route('nextcloud.file.proxy', ['path' => ltrim($filePath, '/')]);
-    }
-    
-    // Untuk file local (fallback)
-    if (file_exists(public_path($filePath))) {
-        return asset($filePath);
-    }
-    
-    return null;
-}
-
-
-public function proxyNextcloudFile(Request $request, $path)
-{
-    $config = config('services.nextcloud');
-    $username = $config['username'];
-    $password = $config['password'];
-    
-    $fullUrl = $config['base_url'] . '/' . $path;
-    
-    try {
-        $response = Http::withBasicAuth($username, $password)
-            ->timeout(30)
-            ->get($fullUrl);
-            
-        if ($response->successful()) {
-            $contentType = $response->header('Content-Type');
-            
-            return response($response->body(), 200)
-                ->header('Content-Type', $contentType)
-                ->header('Cache-Control', 'public, max-age=3600');
+    public static function getFileUrl($filePath)
+    {
+        if (empty($filePath)) {
+            return null;
         }
         
-        abort(404, 'File not found');
+        // Jika file disimpan di Nextcloud
+        if (strpos($filePath, '/remote.php/dav/files/') === 0) {
+            return route('nextcloud.file.proxy', ['path' => ltrim($filePath, '/')]);
+        }
         
-    } catch (\Exception $e) {
-        abort(500, 'Error accessing file');
+        // Untuk file local (fallback)
+        if (file_exists(public_path($filePath))) {
+            return asset($filePath);
+        }
+        
+        return null;
     }
-}
+
+    public function proxyNextcloudFile(Request $request, $path)
+    {
+        $config = config('services.nextcloud');
+        $username = $config['username'];
+        $password = $config['password'];
+        
+        // Pastikan path dimulai dengan slash
+        if (strpos($path, '/') !== 0) {
+            $path = '/' . $path;
+        }
+        
+        $fullUrl = rtrim($config['base_url'], '/') . $path;
+        
+        try {
+            $response = Http::withBasicAuth($username, $password)
+                ->timeout(30)
+                ->withHeaders([
+                    'Accept' => 'application/octet-stream',
+                ])
+                ->get($fullUrl);
+                
+            if ($response->successful()) {
+                $contentType = $response->header('Content-Type') ?? 'application/octet-stream';
+                
+                return response($response->body(), 200)
+                    ->header('Content-Type', $contentType)
+                    ->header('Content-Disposition', 'inline')
+                    ->header('Cache-Control', 'public, max-age=3600');
+            }
+            
+            Log::error('Nextcloud file not found: ' . $fullUrl . ' - Status: ' . $response->status());
+            abort(404, 'File not found');
+            
+        } catch (\Exception $e) {
+            Log::error('Nextcloud access error: ' . $e->getMessage());
+            abort(500, 'Error accessing file');
+        }
+    }
 }
